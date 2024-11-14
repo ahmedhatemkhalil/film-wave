@@ -11,7 +11,7 @@ function NavBar() {
   return (
     <>
       <nav>
-        <div className=" px-4 md:px-16 py-3 fixed top-0 w-full left-0 shadow-lg z-50  ">
+        <div className=" px-4 md:px-16 py-3 fixed top-0 w-full left-0 shadow-lg z-[100]  ">
           {/* nav container */}
           <div className="  py-2 flex items-center justify-between ">
             {/* menu icon that be hidden on mobile size only */}
@@ -47,7 +47,7 @@ function NavBar() {
             </ul>
 
             {/* Search Icon */}
-            <Search size={40}  />
+            {/* <Search size={40}  /> */}
 
             {/* Mobile Menu */}
             {isToggle && <MobileMenuPortal />}

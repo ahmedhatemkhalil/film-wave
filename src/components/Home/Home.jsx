@@ -1,6 +1,7 @@
 import React from "react";
 import { Info, Film } from "react-feather";
 import myImage from "../../assets/poster.jpg";
+import CategorySection from "../CategorySection/CategorySection";
 function Home() {
   return (
     <>
@@ -8,9 +9,9 @@ function Home() {
         <div className=" min-h-[60vh] sm:min-h-[70vh]  md:min-h-screen bg-heroImage bg-cover bg-center relative flex items-center   ">
           <div className=" layer absolute bg-black opacity-50 inset-0 z-0 "></div>
 
-          <div className=" content gap-5 sm:gap-3 bg-gray-500 medium-lg:w-full  w-full md:w-3/4  mx-auto px-8 sm:px-16 flex justify-between z-10">
+          <div className=" content gap-5 sm:gap-3  medium-lg:w-full  w-full md:w-3/4  mx-auto px-8 sm:px-16 flex justify-between z-10">
             {/* Left section with movie info */}
-            <div className="first  w-full md:w-3/4 text-white medium-lg:w-full  bg-yellow-300 flex flex-col justify-center">
+            <div className="first  w-full md:w-3/4 text-white medium-lg:w-full   flex flex-col justify-center">
               <div className="mt-5 ">
                 <h1 className=" text-2xl sm:text-3xl md:text-5xl font-medium">
                   Harry Potter
@@ -42,12 +43,21 @@ function Home() {
               </div>
             </div>
             {/* Right section with image */}
-            <div className="second  bg-red-700 pr-10 hidden md:block w-[15rem] lg:w-[18rem] xl:w-[20rem] rounded-md    ">
+            <div className="second  pr-10 hidden md:block w-[15rem] lg:w-[18rem] xl:w-[20rem] rounded-md    ">
               <img src={myImage} alt="" className="" />
             </div>
           </div>
         </div>
       </header>
+      {/* second section in Home  */}
+      <section>
+        <div className="py-8 px-16">
+          <CategorySection category="Trending Movies" />
+          <CategorySection category="Trending TV Series" />
+          <CategorySection category="Upcoming Movies" />
+          <CategorySection category="TV Series Airing Today" />
+        </div>
+      </section>
     </>
   );
 }
