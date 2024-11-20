@@ -1,13 +1,22 @@
 import React from "react";
+import seriesCover from '../../assets/cover22.jpg'
+import movieCover from '../../assets/cover2.jpg'
 
-function HeroBanner({ bgImage }) {
-  const backGroundImage = bgImage === "series" ? "bg-series" : "bg-movies";
+function HeroBanner({ kind }) {
+  const backgroundImage =
+    kind === "movie"
+      ? movieCover
+      : seriesCover
+  console.log(backgroundImage, "bg-img");
   return (
     <>
       <div
-        className={` ${backGroundImage} relative h-[65vh] bg-center bg-cover bg-img `}
+       style={{
+        backgroundImage: `url(${backgroundImage})`,
+      }}
+        className={`  relative h-[65vh] bg-center bg-cover  `}
       >
-        <div className="absolute inset-0 z-30 w-full h-full bg-black bg-opacity-75"></div>
+        <div className="absolute inset-0 z-30 w-full h-full bg-black bg-opacity-75 "></div>
         <div className="absolute bg-custom-grad inset-0 z-30 w-full h-full"></div>
       </div>
     </>

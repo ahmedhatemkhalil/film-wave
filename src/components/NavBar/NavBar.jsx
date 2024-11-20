@@ -1,8 +1,8 @@
 import React from "react";
-import { Search, Menu, X } from "react-feather";
+import { Menu, X } from "react-feather";
 import { Link } from "react-router-dom";
 import logo from "../../../src/assets/logo.png";
-import NavItems, { menuItems } from "./NavItems";
+import NavItems, { menuItems } from "../NavBar/NavItems";
 import MobileMenuPortal from "./MobileMenuPortal";
 
 function NavBar() {

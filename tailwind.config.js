@@ -9,7 +9,8 @@ module.exports = {
         'tablet': '576px',
         'max-775px': { 'max': '775px' },
         'medium-lg': { 'min': '768px', 'max': '1311px' },
-        'md-363': '363px'
+        'md-363': '363px',
+        'max-975': '975px'
 
       },
       width: {

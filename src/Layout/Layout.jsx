@@ -8,7 +8,6 @@ function Layout() {
       <div className=" pb-16 md:pb-0 ">
         <NavBar />
         <Outlet />
-        {/* <Footer /> */}
       </div>
     </>
   );
