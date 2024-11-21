@@ -3,12 +3,10 @@ import { Link } from "react-router-dom";
 
 function GridItems({ name, date, posterImage, rate, type, id }) {
   const roundedRate = parseFloat(rate?.toFixed(1));
-  const detailsPath =
-    type === "series" ? `/series-details/${id}` : `/movie-details/${id}`;
 
   return (
     <>
-      <Link to={`/series-details/${id}`}>
+      <Link to={`/details/${type}/${id}`}>
         <div className=" poster  cursor-pointer  mb-14  relative group">
           <div className=" relative mt-3">
             <img

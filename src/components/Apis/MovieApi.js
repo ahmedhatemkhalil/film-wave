@@ -86,10 +86,12 @@ export const useMovieList = (endpoint, type) => {
 
 // fetching for all
 const fetch = async (endpoint) => {
-    const { data } = await axios.get(`${API_BASE_URL}${endpoint}`, { headers: AUTH_HEADER })
+    const { data  } = await axios.get(`${API_BASE_URL}${endpoint}`, { headers: AUTH_HEADER })
     if (!data.results) throw new Error('Invalid response format');
-    return data.results
+   
+    return data.results;
 }
+
 
 
 

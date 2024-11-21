@@ -13,12 +13,11 @@ const myRouter = createBrowserRouter([
                 path: '/movies', element: <Movies />,
             },
             { path: '/movies/:type', element: <Movies /> },
-
             { path: '/tv', element: <Series /> },
             { path: '/tv/:type', element: <Series /> },
-            { path: '/series-details/:id', element: <Details /> },
-            { path: '/movies-details/:id', element: <Details /> },
-            // { path: '/series-details/:type/:id', element: <Details /> },
+
+            { path: '/details/:type/:id', element: <Details /> },
+
         ]
 
     },

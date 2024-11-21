@@ -20,6 +20,8 @@ function NavItems({ icon, label, link }) {
   return (
     <li className="px-3">
       <NavLink
+       
+      
         className="flex items-center p-6 md:p-0 hover:text-white"
         to={link}
       >

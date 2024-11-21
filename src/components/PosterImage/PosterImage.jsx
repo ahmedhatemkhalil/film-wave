@@ -8,7 +8,7 @@ function PosterImage({ classes , poster }) {
   return (
     <>
       <div className={`${sharedClasses} ${specificClasses}`}>
-        <img src={`https://image.tmdb.org/t/p/original/${poster}`} alt="" className="w-full  max-w-xs md:max-w-md " />
+        <img src={poster} alt="" className="w-full  max-w-xs md:max-w-md " />
       </div>
     </>
   );

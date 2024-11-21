@@ -3,7 +3,7 @@ import HeroBanner from "./../HeroBanner/HeroBanner";
 import SearchBar from "../SearchBar/SearchBar";
 import GridItems from "../GridItems/GridItems";
 import { seriesLists } from "../../data/series and movies lists";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import InfiniteScroll from "./../../../node_modules/react-infinite-scroll-component/dist/index.es";
 import { useParams } from "react-router-dom";
 import { useSeriesList } from "../Apis/SeriesApi";
@@ -28,9 +28,9 @@ function Series() {
           </h2>
           <ul className=" flex flex-wrap gap-y-2 gap-x-6 text-xl text-white">
             {seriesLists.map(({ path, text, id }) => (
-              <li key={id}>
-                <Link to={path}> {text} </Link>
-              </li>
+              <li className=" hover:text-mainColor duration-300 transition-all" key={id}>
+              <NavLink className={({isActive})=>  isActive ? 'text-mainColor' : ''  } to={path}> {text} </NavLink>
+            </li>
             ))}
           </ul>
 
@@ -44,7 +44,7 @@ function Series() {
             <div className="   movie grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7 gap-10">
               {series?.map((show) => (
                 <GridItems
-                  type="series"
+                  type="tv"
                   id={show?.id}
                   series={show}
                   rate={show?.vote_average}

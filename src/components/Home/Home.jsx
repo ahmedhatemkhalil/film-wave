@@ -7,11 +7,20 @@ import { useTVSeriesAiringToday, useTrendingSeries } from "../Apis/SeriesApi";
 import HomeSlider from "./HomeSlider";
 
 function Home() {
-  const { data: trendingMovies } = useTrendingMovies();
+  const { data: trendingMovies , isLoading:trendingLoading } = useTrendingMovies();
   const { data: trendingSeries } = useTrendingSeries();
   const { data: upComingMovies } = useUpComingMovies();
   const { data: tvSeriesAiringToday } = useTVSeriesAiringToday();
 
+
+  if(trendingLoading) {
+    <p>Loading...</p>
+  }
+  else{
+    <p>fuck</p>
+
+  }
+  console.log(trendingLoading , 'trending')
   return (
     <>
       <HomeSlider />

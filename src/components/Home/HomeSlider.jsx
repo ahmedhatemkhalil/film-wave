@@ -25,6 +25,7 @@ export default function HomeSlider() {
   return (
     <Slider {...settings}>
       {displayedMovies?.map((movie) => {
+        console.log(movie, "movie movie");
         const posterImage = `https://image.tmdb.org/t/p/original/${movie.poster_path}`;
         const backgroundImage = `https://image.tmdb.org/t/p/original/${movie.backdrop_path}`;
         return (
@@ -41,7 +42,7 @@ export default function HomeSlider() {
                 <div className="first  w-full md:w-3/4 text-white medium-lg:w-full   flex flex-col justify-center">
                   <div className="mt-5 ">
                     <h1 className=" text-2xl sm:text-3xl md:text-5xl font-medium">
-                      {movie.name}
+                      {movie.title || movie.original_title || "title"}
                     </h1>
                   </div>
                   {/* <div className="mt-5">
@@ -67,7 +68,7 @@ export default function HomeSlider() {
                   </div>
                 </div>
                 {/* Right section with image */}
-                <PosterImage posterImage={posterImage} classes="swipe" />
+                <PosterImage poster={posterImage} classes="swipe" />
               </div>
             </div>
           </div>
