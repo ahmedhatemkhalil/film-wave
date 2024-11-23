@@ -2,7 +2,7 @@ import React from "react";
 import { ChevronRight } from "react-feather";
 import SwipeList from "../SwipeList/SwipeList";
 import { useNavigate } from "react-router-dom";
-function CategorySection({ category, data, showButton = true }) {
+function CategorySection({ category, data, showButton = true , mediaType }) {
   const navigate = useNavigate();
 
   const handleViewMore = () => {
@@ -37,7 +37,7 @@ function CategorySection({ category, data, showButton = true }) {
           )}
         </div>
       </div>
-      <SwipeList data={data} />
+      <SwipeList data={data} mediaType={mediaType} />
     </>
   );
 }

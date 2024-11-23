@@ -95,6 +95,7 @@ const fetch = async (endpoint) => {
 
 
 
+
 export const getTrendingMovies = () => fetch('trending/movie/day') //fetch trending movies
 export const getUpComingMovies = () => fetch('movie/upcoming')     //fetch upComing movies
 export const getPopularMovies = () => fetch('movie/popular')         // fetch popular movies

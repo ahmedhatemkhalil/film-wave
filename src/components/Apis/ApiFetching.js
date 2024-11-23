@@ -1,8 +1,8 @@
 import axios from "axios";
 import { useQuery, useInfiniteQuery } from "react-query";
 
-const API_BASE_URL = "https://api.themoviedb.org/3/";
-const AUTH_HEADER = {
+export const API_BASE_URL = "https://api.themoviedb.org/3/";
+export const AUTH_HEADER = {
   Authorization: `Bearer ${process.env.REACT_APP_TMDB_TOKEN}`,
 };
 
@@ -42,6 +42,7 @@ export const useTrailer = (type, id) =>
   useQuery([`fetchTrailer`, type, id], () =>
     fetchData({ type, id, endpoint: "videos" })
   );
+  
 
 export const useCast = (type, id) =>
   useQuery([`fetchCast`, type, id], () =>
@@ -52,3 +53,4 @@ export const useRelated = (type, id) =>
   useQuery([`fetchRelated`, type, id], () =>
     fetchData({ type, id, endpoint: "similar" })
   );
+

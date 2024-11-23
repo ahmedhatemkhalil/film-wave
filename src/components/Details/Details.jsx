@@ -17,12 +17,11 @@ import CastTeam from "./CastTeam";
 import Trailer from "./Trailer";
 
 function Details() {
-  const { id, type } = useParams(); 
+  const { id, type } = useParams();
   const { data: detailsData, isLoading: detailsLoading } = useDetails(type, id);
   const { data: trailerData, isLoading: trailerLoading } = useTrailer(type, id);
   const { data: castData, isLoading: castLoading } = useCast(type, id);
   const { data: relatedData, isLoading: relatedLoading } = useRelated(type, id);
-
 
   // Handling loading state
   if (detailsLoading || trailerLoading || castLoading || relatedLoading) {
@@ -30,12 +29,12 @@ function Details() {
   }
 
   // Extract trailer key for embedding YouTube
-  const trailerKey = trailerData?.results?.find(
+   const trailerKey = trailerData?.results?.find(
     (video) => video?.type === "Trailer"
   )?.key;
-  
+
   const title = type === "tv" ? detailsData?.name : detailsData?.title;
-  
+
   const poster = `https://image.tmdb.org/t/p/original/${detailsData?.poster_path}`;
   const backdrop = detailsData?.backdrop_path;
 
@@ -92,13 +91,13 @@ function Details() {
         <Trailer
           trailerKey={trailerKey}
           title={type === "tv" ? detailsData?.name : detailsData?.title}
-          />
+        />
 
         {/* Related Section */}
 
         <CategorySection
           showButton={false}
-          category= {type === 'tv' ? 'similar series' : 'similar movies'}
+          category={type === "tv" ? "similar series" : "similar movies"}
           data={processedRelatedData}
           rate={(relatedData?.results?.[0]?.vote_average || 0).toFixed(1)}
         />

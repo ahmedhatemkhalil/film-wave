@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-
+import defaultPhoto from '../../assets/image-placeholder.png'
 function GridItems({ name, date, posterImage, rate, type, id }) {
   const roundedRate = parseFloat(rate?.toFixed(1));
 
@@ -11,7 +11,7 @@ function GridItems({ name, date, posterImage, rate, type, id }) {
           <div className=" relative mt-3">
             <img
               className="aspect-[1/1.5] rounded-md"
-              src={posterImage}
+              src={posterImage || {defaultPhoto}}
               alt=""
             />
             <div className="shadow-layer absolute inset-0 bg-black opacity-35 group-hover:opacity-60 transition duration-300"></div>

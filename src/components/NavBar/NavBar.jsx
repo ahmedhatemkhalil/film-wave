@@ -4,14 +4,20 @@ import { Link } from "react-router-dom";
 import logo from "../../../src/assets/logo.png";
 import NavItems, { menuItems } from "../NavBar/NavItems";
 import MobileMenuPortal from "./MobileMenuPortal";
+import useScroll from "../../customHocks/useScroll";
 
 function NavBar() {
   const [isToggle, setToggle] = React.useState(false);
+  const isScrolled = useScroll();
 
   return (
     <>
       <nav>
-        <div className=" px-4 md:px-16 py-3 fixed top-0 w-full left-0 shadow-lg z-[100]  ">
+        <div
+          className={`  ${
+            isScrolled ? "bg-black" : " duration-300 transition-all"
+          }  px-4 md:px-16 py-3 fixed top-0 w-full left-0  z-[100]`}
+        >
           {/* nav container */}
           <div className="  py-2 flex items-center justify-between ">
             {/* menu icon that be hidden on mobile size only */}

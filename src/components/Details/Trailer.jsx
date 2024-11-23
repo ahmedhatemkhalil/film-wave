@@ -1,6 +1,6 @@
 import React from "react";
 
-function Trailer({ trailerKey, title }) {
+function Trailer({ trailerKey, title  }) {
   return (
     <>
       {trailerKey && (

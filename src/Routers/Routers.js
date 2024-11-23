@@ -7,22 +7,29 @@ import Details from '../components/Details/Details';
 
 const myRouter = createBrowserRouter([
     {
-        path: '/', element: <Layout />, children: [
+        path: '/',
+        element: <Layout />,
+        children: [
             { path: '/', element: <Home /> },
             {
-                path: '/movies', element: <Movies />,
+                path: '/movies/:type?', // movies path
+                element: <Movies />
             },
-            { path: '/movies/:type', element: <Movies /> },
-            { path: '/tv', element: <Series /> },
-            { path: '/tv/:type', element: <Series /> },
-
-            { path: '/details/:type/:id', element: <Details /> },
-
+            {
+                path: '/tv/:type?', // series path
+                element: <Series />
+            },
+            {
+                path: '/details/:type/:id', //  differentiate between movies and tv series
+                element: <Details />
+            },
+            {
+                path: '/trailer/:id/videos', // Trailer path
+                element: <Details />
+            },
         ]
-
     },
-
-], { future: { v7_skipActionErrorRevalidation: true, v7_startTransition: true, } })
+], { future: { v7_skipActionErrorRevalidation: true, v7_startTransition: true } });
 
 
 export default myRouter
