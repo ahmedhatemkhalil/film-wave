@@ -20,7 +20,7 @@ function DetailsInfo({ status, releaseDate, runtime }) {
         </div>
         <div className="status flex gap-2">
           <p className="text-white text-lg font-medium">Runtime:</p>
-          <p className="text-gray-300 text-lg">{formatRunTime(runtime)}</p>
+          <p className="text-gray-300 text-lg">{formatRunTime(runtime)  || runtime } </p>
         </div>
       </div>
     </>

@@ -21,14 +21,14 @@ function CategorySection({ category, data, showButton = true , mediaType }) {
   };
   return (
     <>
-      <div className="trending-movies text-white  ">
+      <div className=" text-sm  sm:text-xl md:text-2xl mt-3 mb-3 md:mb-10 trending-movies text-white  ">
         <div className="caption flex justify-between items-center  ">
-          <h2> {category} </h2>
+          <h2 className=""> {category} </h2>
           {showButton && (
             <div className="group">
               <button
                 onClick={handleViewMore}
-                className=" hover:text-mainColor duration-300 trans text-xl text-center  rounded-full   flex items-center justify-center   group-hover:text-main-color transition-all ease-in-out "
+                className=" hover:text-mainColor duration-300 trans text-sm sm:text-xl md:text-2xl text-center  rounded-full   flex items-center justify-center   group-hover:text-main-color transition-all ease-in-out "
               >
                 View More
                 <ChevronRight size={30} />

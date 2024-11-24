@@ -4,6 +4,7 @@ import Home from '../components/Home/Home'
 import Movies from './../components/Movies/Movies';
 import Series from '../components/Series/Series';
 import Details from '../components/Details/Details';
+import ErrorPage from '../components/ErrorPage/ErrorPage';
 
 const myRouter = createBrowserRouter([
     {
@@ -12,11 +13,11 @@ const myRouter = createBrowserRouter([
         children: [
             { path: '/', element: <Home /> },
             {
-                path: '/movies/:type?', // movies path
+                path: 'movies/:type?', // movies path
                 element: <Movies />
             },
             {
-                path: '/tv/:type?', // series path
+                path: 'tv/:type?', // series path
                 element: <Series />
             },
             {
@@ -26,6 +27,10 @@ const myRouter = createBrowserRouter([
             {
                 path: '/trailer/:id/videos', // Trailer path
                 element: <Details />
+            },
+            {
+                path: '*', 
+                element: <ErrorPage />
             },
         ]
     },

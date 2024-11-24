@@ -15,6 +15,7 @@ import DetailsInfo from "./DetailsInfo";
 import OverView from "./OverView";
 import CastTeam from "./CastTeam";
 import Trailer from "./Trailer";
+import Loading from "../Loading/Loading";
 
 function Details() {
   const { id, type } = useParams();
@@ -23,13 +24,18 @@ function Details() {
   const { data: castData, isLoading: castLoading } = useCast(type, id);
   const { data: relatedData, isLoading: relatedLoading } = useRelated(type, id);
 
-  // Handling loading state
-  if (detailsLoading || trailerLoading || castLoading || relatedLoading) {
-    return <p className="text-white text-center">Loading...</p>;
+  const isLoading =
+    detailsLoading || trailerLoading || castLoading || relatedLoading;
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <Loading />
+      </div>
+    );
   }
 
   // Extract trailer key for embedding YouTube
-   const trailerKey = trailerData?.results?.find(
+  const trailerKey = trailerData?.results?.find(
     (video) => video?.type === "Trailer"
   )?.key;
 
@@ -75,7 +81,11 @@ function Details() {
                     ? detailsData?.first_air_date
                     : detailsData?.release_date
                 }
-                runtime={detailsData?.runtime}
+                runtime={
+                  type === "tv"
+                    ? detailsData?.episode_run_time
+                    : detailsData?.runtime
+                }
                 DetailsInfo
               />{" "}
             </div>

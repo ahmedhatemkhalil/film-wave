@@ -8,23 +8,19 @@ function SearchBar({ setResults, searchType }) {
   const [searchTerm, setSearchTerm] = React.useState("");
 
   async function getSearchFetch() {
-    if (searchTerm.trim() === "") {
+    if (!searchTerm.trim()) {
       setResults([]);
       return;
     }
     const endpoint = searchType === "movie" ? "movie" : "tv";
 
     try {
-      const res = await axios.get(
+      const { data } = await axios.get(
         `${API_BASE_URL}search/${endpoint}?include_adult=false&language=en-US&page=1&query=${searchTerm}`,
         { headers: AUTH_HEADER }
       );
 
-      if (res?.data?.results?.length === 0) {
-        setResults(null);
-      } else {
-        setResults(res?.data?.results);
-      }
+      setResults(data?.results?.length ? data.results : null);
     } catch (error) {
       console.error("Error fetching search results:", error);
       setResults(null);
@@ -35,10 +31,10 @@ function SearchBar({ setResults, searchType }) {
     <>
       <div className="max-w-sm flex items-center relative">
         <Search
-          className={`absolute transition-all duration-[] ease-in-out ${
+          className={`absolute left-4  ${
             isFocused
-              ? "text-mainColor left-auto right-0"
-              : "text-gray-500 left-3"
+              ? "text-mainColor  "
+              : "text-gray-500 "
           }`}
           strokeWidth={4}
           size={15}
@@ -52,7 +48,7 @@ function SearchBar({ setResults, searchType }) {
           type="text"
           placeholder="...Search"
           className={`${
-            isFocused ? "placeholder-transparent pl-4" : "pl-10"
+            isFocused ? "placeholder-transparent ease-in-out duration-300 transition-all pl-10" : "pl-10"
           } w-full text-lg py-1 border-0 focus:border-0 focus:outline-none`}
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}

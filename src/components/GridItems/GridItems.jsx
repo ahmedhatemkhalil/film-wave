@@ -1,18 +1,18 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import defaultPhoto from '../../assets/image-placeholder.png'
-function GridItems({ name, date, posterImage, rate, type, id }) {
-  const roundedRate = parseFloat(rate?.toFixed(1));
+import defaultPhoto from "../../assets/image-placeholder.png";
+function GridItems({ name, date, posterImage, rate, type, id, altText }) {
+  const roundedRate = rate ? parseFloat(rate?.toFixed(1)) : null;
 
   return (
     <>
       <Link to={`/details/${type}/${id}`}>
-        <div className=" poster  cursor-pointer  mb-14  relative group">
-          <div className=" relative mt-3">
+        <div className=" poster  cursor-pointer mt-6   relative group">
+          <div className=" relative ">
             <img
               className="aspect-[1/1.5] rounded-md"
-              src={posterImage || {defaultPhoto}}
-              alt=""
+              src={posterImage || defaultPhoto}
+              alt={altText}
             />
             <div className="shadow-layer absolute inset-0 bg-black opacity-35 group-hover:opacity-60 transition duration-300"></div>
 

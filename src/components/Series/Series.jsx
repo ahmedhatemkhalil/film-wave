@@ -7,23 +7,39 @@ import { NavLink } from "react-router-dom";
 import InfiniteScroll from "./../../../node_modules/react-infinite-scroll-component/dist/index.es";
 import { useParams } from "react-router-dom";
 import { useSeriesList } from "../Apis/SeriesApi";
+import Loading from "../Loading/Loading";
+import defaultPhoto from "../../assets/image-placeholder.png";
 
 function Series() {
-  const [series, setSeries] = React.useState("");
+  const [isSearching, setIsSearching] = React.useState();
+  const [series, setSeries] = React.useState([]);
   const { type = "popular" } = useParams();
   const endpoint = type === "trending" ? "trending" : "tv";
-  const { data, isLoading, isError, error, fetchNextPage, hasNextPage } =
-    useSeriesList(endpoint, endpoint === "trending" ? "day" : type);
+  const { data, isLoading, fetchNextPage, hasNextPage, error } = useSeriesList(
+    endpoint,
+    endpoint === "trending" ? "day" : type
+  );
 
-  const defaultSeries = data?.pages.flatMap((show) => show.results);
+  const defaultSeries = React.useMemo(() => {
+    return data?.pages.flatMap((show) => show.results) || [];
+  }, [data]);
 
-  if (isLoading) return <div>Loading...</div>;
-  if (isError) return <div>Error: {error.message}</div>;
+  if (isLoading) {
+    return <Loading />;
+  }
+  if (error) {
+    return <p>Error: {error.message}</p>;
+  }
+  const handleSearch = (results) => {
+    setSeries(results || []);
+    setIsSearching(results === null);
+  };
+
   return (
     <>
       <HeroBanner kind="series" />
       <div className="relative px-0 sm:px-16 z-50 -mt-[50vh] pb-6 md:py-12 flex flex-col gap-6 md:gap-10">
-        <div className="flex flex-col gap-3 md:gap-6 px-4 sm:px-0 ">
+        <div className="flex flex-col gap-3 md:gap-6 px-4 530:p-8 sm:px-0 ">
           <h2 className=" text-3xl md:text-4xl text-white font-medium">
             Series
           </h2>
@@ -46,20 +62,19 @@ function Series() {
             ))}
           </ul>
 
-          <SearchBar searchType="tv" setResults={setSeries} />
+          <SearchBar searchType="tv" setResults={handleSearch} />
           <InfiniteScroll
-            dataLength={series.length || defaultSeries.length}
+            dataLength={series?.length || defaultSeries?.length}
             next={fetchNextPage}
             hasMore={!!hasNextPage}
             loader={<h4>Loading...</h4>}
           >
-            {series === null ? (
-              <p className="">
-                {" "}
+            {isSearching ? (
+              <p className=" text-white text-xl">
                 Couldn't find anything related to your search query.
               </p>
             ) : (
-              <div className="   movie grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7 gap-10">
+              <div className="   movie grid grid-cols-2 530:grid-cols-3  gap-x-10 530:gap-x-6 md:gap-x-10 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-7 gap-y-2 sm:gap-y-10 ">
                 {(series?.length > 0 ? series : defaultSeries).map((show) => (
                   <GridItems
                     type="tv"
@@ -67,9 +82,14 @@ function Series() {
                     series={show}
                     rate={show?.vote_average}
                     key={show?.id}
-                    posterImage={`https://image.tmdb.org/t/p/w500${show?.poster_path}`}
+                    posterImage={
+                      show.poster_path
+                        ? `https://image.tmdb.org/t/p/original${show.poster_path}`
+                        : defaultPhoto
+                    }
                     name={show?.name}
                     date={show?.first_air_date}
+                    altText={show?.name || "Series image"}
                   />
                 ))}
               </div>
