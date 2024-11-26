@@ -1,21 +1,25 @@
 import React from "react";
-
+import actor from "../../assets/actor.png";
 function CastTeam({ cast }) {
   return (
     <>
-      <div className="cast">
+      <div className="cast gap-3 md:gap-4 flex flex-col">
         <h2 className="text-white text-3xl">Cast</h2>
-        <div className="cast-info flex flex-wrap gap-3">
-          {cast?.slice(0, 6)?.map((actor) => (
-            <div key={actor?.id} className="flex flex-col gap-2 w-20">
+        <div className="cast-info flex flex-wrap gap-5">
+          {cast?.slice(0, 6)?.map(({ id, name, profile_path }) => (
+            <div key={id} className="flex flex-col gap-2 w-20">
               <img
-                src={`https://image.tmdb.org/t/p/original/${actor?.profile_path}`}
-                alt={actor?.name || "Actor"}
+                src={
+                  profile_path
+                    ? `https://image.tmdb.org/t/p/original/${profile_path}`
+                    : actor
+                }
+                alt={
+                  name ? `${name}'s profile picture` : "Actor's profile picture"
+                }
                 className="w-full h-32 bg-contain bg-no-repeat "
               />
-              <p className="text-sm text-gray-300 break-words hyphens-auto">
-                {actor?.name}
-              </p>
+              <p className="text-sm text-gray-300 break-words ">{name}</p>
             </div>
           ))}
         </div>

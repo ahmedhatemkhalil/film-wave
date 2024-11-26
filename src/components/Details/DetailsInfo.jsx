@@ -1,11 +1,13 @@
 import React from "react";
 
 function DetailsInfo({ status, releaseDate, runtime }) {
-  const formatRunTime = (minutes) => {
-    if (!minutes) return "N/A";
-    const hours = Math.floor(minutes / 60);
-    const mins = minutes % 60;
-    return `${hours}h ${mins}m`;
+  const formatRunTime = (value) => {
+    if (typeof value === "number") {
+      const hours = Math.floor(value / 60);
+      const mins = value % 60;
+      return `${hours}h ${mins}m`;
+    }
+    return value;
   };
   return (
     <>
@@ -19,8 +21,10 @@ function DetailsInfo({ status, releaseDate, runtime }) {
           <p className="text-gray-300 text-lg">{releaseDate}</p>
         </div>
         <div className="status flex gap-2">
-          <p className="text-white text-lg font-medium">Runtime:</p>
-          <p className="text-gray-300 text-lg">{formatRunTime(runtime)  || runtime } </p>
+          <p className="text-white text-lg font-medium">
+            {typeof runtime === "number" ? "Runtime:" : "seasons:"}
+          </p>
+          <p className="text-gray-300 text-lg">{formatRunTime(runtime)} </p>
         </div>
       </div>
     </>

@@ -2,31 +2,48 @@ import React from "react";
 import { ChevronRight } from "react-feather";
 import SwipeList from "../SwipeList/SwipeList";
 import { useNavigate } from "react-router-dom";
-function CategorySection({ category, data, showButton = true , mediaType }) {
+import clsx from "clsx";
+function CategorySection({
+  category,
+  data,
+  showButton = true,
+  mediaType,
+  type,
+}) {
   const navigate = useNavigate();
 
   const handleViewMore = () => {
-    let path;
-
-    if (category === "Trending Movies") {
-      path = "/movies/trending";
-    } else if (category === "Trending TV Series") {
-      path = "/tv/trending";
-    } else if (category === "Upcoming Movies") {
-      path = "/movies/upcoming";
-    } else if (category === "TV Series Airing Today") {
-      path = "/tv/airing_today";
+    const PathObject = {
+      "Trending Movies": "/movies/trending",
+      "Trending TV Series": "/tv/trending",
+      "Upcoming Movies": "/movies/upcoming",
+      "TV Series Airing Today": "/tv/airing_today",
+    };
+    const path = PathObject[category];
+    if (path) {
+      return navigate(path);
     }
-    navigate(path);
   };
+
+  const sharedClasses = " text-white text-sm  sm:text-xl md:text-2xl ";
+  const detailsSpecificClasses = " text-xl";
+  const swipeSpecificClasses = " mt-3 mb-3 md:mb-10";
+
+  const specificClasses = clsx([
+    sharedClasses,
+    type === "details" ? detailsSpecificClasses : swipeSpecificClasses,
+  ]);
+
+  //
   return (
     <>
-      <div className=" text-sm  sm:text-xl md:text-2xl mt-3 mb-3 md:mb-10 trending-movies text-white  ">
+      <div className={specificClasses}>
         <div className="caption flex justify-between items-center  ">
           <h2 className=""> {category} </h2>
           {showButton && (
             <div className="group">
               <button
+                aria-label="View more content"
                 onClick={handleViewMore}
                 className=" hover:text-mainColor duration-300 trans text-sm sm:text-xl md:text-2xl text-center  rounded-full   flex items-center justify-center   group-hover:text-main-color transition-all ease-in-out "
               >
@@ -37,7 +54,7 @@ function CategorySection({ category, data, showButton = true , mediaType }) {
           )}
         </div>
       </div>
-      <SwipeList data={data} mediaType={mediaType} />
+      <SwipeList type={type} data={data} mediaType={mediaType} />
     </>
   );
 }

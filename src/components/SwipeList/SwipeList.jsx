@@ -2,42 +2,50 @@ import React from "react";
 import Rating from "../Rating/Rating";
 import { Link } from "react-router-dom";
 import defaultPhoto from "../../assets/image-placeholder.png";
+import clsx from "clsx";
 
-function SwipeList({ data, mediaType }) {
- 
+const sharedClasses =
+  "movie  flex overflow-x-auto whitespace-nowrap scrollbar-hide gap-8 ";
+const detailsSpecificClasses = " pb-32";
+const swipeSpecificClasses = "pb-8 mt-3";
+
+function SwipeList({ data, mediaType, type }) {
+  const specificClasses = clsx([
+    sharedClasses,
+    (type = "details" ? detailsSpecificClasses : swipeSpecificClasses),
+  ]);
+  const getPosterTitle = (poster) => poster.title || poster.name || "Untitled";
   return (
     <>
-      <div className="movie mt-3 flex overflow-x-auto whitespace-nowrap scrollbar-hide gap-8 ">
-        {/* Placeholder movie items to fetch data */}
-        {data?.map((poster) => {
-          console.log(poster, "poster");
-          return (
-            <Link
-              key={poster.id}
-              to={`/details/${poster.media_type || mediaType}/${poster.id}`}
-            >
-              <div className="  poster min-w-48 h-64 cursor-pointer flex-shrink-0 mb-14  relative group">
-                <img
-                  src={
-                    poster.poster_path
-                      ? `https://image.tmdb.org/t/p/original${poster.poster_path}`
-                      : defaultPhoto
-                  }
-                  alt={poster.title || poster.name || "default image"}
-                  className=" w-full h-full object-cover"
-                />
-                <div className="shadow-layer absolute inset-0 bg-black opacity-35 group-hover:opacity-60 transition duration-300"></div>
-                {/* Rating  */}
-                <Rating rate={poster.vote_average} type="swipe" />
-                <div className="poster-details text-white ">
-                  <h2 className=" text-lg sm:text-xl w-full  break-words  whitespace-break-spaces  text-white mt-4  ">
-                    {poster.title || poster.name || "untitled"}{" "}
-                  </h2>
+      <div className={specificClasses}>
+        {data?.map(
+          ({ id, media_type, poster_path, title, vote_average, name }) => {
+            return (
+              <Link key={id} to={`/details/${media_type || mediaType}/${id}`}>
+                <div className="  poster    min-w-48 h-72 cursor-pointer flex-shrink-0 mb-14  relative group">
+                  <img
+                    src={
+                      poster_path
+                        ? `https://image.tmdb.org/t/p/original${poster_path}`
+                        : defaultPhoto
+                    }
+                    alt={getPosterTitle({ title, name })}
+                    className=" w-full h-full object-cover"
+                    loading="lazy"
+                  />
+                  <div className="shadow-layer absolute inset-0 bg-black opacity-35 group-hover:opacity-60 transition duration-300"></div>
+                  {/* Rating  */}
+                  <Rating rate={vote_average} type="swipe" />
+                  <div className="poster-details text-white ">
+                    <h2 className=" text-lg sm:text-xl w-full  break-words  whitespace-break-spaces  text-white mt-4  ">
+                      {getPosterTitle({ title, name })}
+                    </h2>
+                  </div>
                 </div>
-              </div>
-            </Link>
-          );
-        })}
+              </Link>
+            );
+          }
+        )}
       </div>
     </>
   );

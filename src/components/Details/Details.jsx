@@ -19,13 +19,38 @@ import Loading from "../Loading/Loading";
 
 function Details() {
   const { id, type } = useParams();
-  const { data: detailsData, isLoading: detailsLoading } = useDetails(type, id);
-  const { data: trailerData, isLoading: trailerLoading } = useTrailer(type, id);
-  const { data: castData, isLoading: castLoading } = useCast(type, id);
-  const { data: relatedData, isLoading: relatedLoading } = useRelated(type, id);
+  const {
+    data: detailsData,
+    isLoading: detailsLoading,
+    error: detailsError,
+  } = useDetails(type, id);
+  const {
+    data: trailerData,
+    isLoading: trailerLoading,
+    error: trailerError,
+  } = useTrailer(type, id);
+  const {
+    data: castData,
+    isLoading: castLoading,
+    error: castError,
+  } = useCast(type, id);
+  const {
+    data: relatedData,
+    isLoading: relatedLoading,
+    error: relatedError,
+  } = useRelated(type, id);
 
-  const isLoading =
-    detailsLoading || trailerLoading || castLoading || relatedLoading;
+  const loadingFlag = [
+    detailsLoading,
+    trailerLoading,
+    castLoading,
+    relatedLoading,
+  ];
+  const errorFlag = [detailsError, trailerError, castError, relatedError];
+
+  const isLoading = loadingFlag.includes(true);
+  const isError = errorFlag.includes(true);
+
   if (isLoading) {
     return (
       <div className="flex justify-center items-center min-h-screen">
@@ -33,13 +58,15 @@ function Details() {
       </div>
     );
   }
-
+  if (isError) {
+    return <div>Error fetching details: {isError.message}</div>;
+  }
   // Extract trailer key for embedding YouTube
   const trailerKey = trailerData?.results?.find(
     (video) => video?.type === "Trailer"
   )?.key;
 
-  const title = type === "tv" ? detailsData?.name : detailsData?.title;
+  const title = type === "tv" ? detailsData?.name || "Unknown TV Show"  : detailsData?.title || "Unknown Movie";
 
   const poster = `https://image.tmdb.org/t/p/original/${detailsData?.poster_path}`;
   const backdrop = detailsData?.backdrop_path;
@@ -53,9 +80,9 @@ function Details() {
       {/* Backdrop */}
       <BackdropCover backgroundCover={backdrop} />
 
-      <div className="px-16 py-6 md:py-12 flex flex-col gap-10 md:gap-9 text-white">
+      <div className=" px-6 sm:px-12  special-size:px-12 lg:px-16 py-6 md:py-12 flex flex-col gap-10 md:gap-9 text-white">
         {/* Main Details Section */}
-        <div className="z-50 -mt-[26rem] flex justify-center gap-10">
+        <div className="z-50 -mt-[26rem] flex justify-center max-975:gap-10">
           <div className="first-section">
             <PosterImage poster={poster} classes="details" />
           </div>
@@ -83,34 +110,32 @@ function Details() {
                 }
                 runtime={
                   type === "tv"
-                    ? detailsData?.episode_run_time
+                    ? `${detailsData?.number_of_seasons}`
                     : detailsData?.runtime
                 }
                 DetailsInfo
               />{" "}
             </div>
-
             {/* Cast Section */}
-
             <CastTeam cast={castData?.cast} />
           </div>
         </div>
 
         {/* Trailer Section */}
-
         <Trailer
           trailerKey={trailerKey}
           title={type === "tv" ? detailsData?.name : detailsData?.title}
         />
-
         {/* Related Section */}
-
+       {processedRelatedData?.length > 0 && (
         <CategorySection
+          type="details"
           showButton={false}
-          category={type === "tv" ? "similar series" : "similar movies"}
+          category={type === "tv" ? "similar Tv Shows" : "similar movies"}
           data={processedRelatedData}
           rate={(relatedData?.results?.[0]?.vote_average || 0).toFixed(1)}
         />
+       )}
       </div>
     </>
   );

@@ -13,24 +13,26 @@ const myRouter = createBrowserRouter([
         children: [
             { path: '/', element: <Home /> },
             {
-                path: 'movies/:type?', // movies path
-                element: <Movies />
+                path: 'movies/:type?', 
+                element: <Movies /> ,
+            
+                
             },
             {
-                path: 'tv/:type?', // series path
+                path: 'tv/:type?', 
                 element: <Series />
             },
             {
-                path: '/details/:type/:id', //  differentiate between movies and tv series
+                path: 'details/:type/:id', 
                 element: <Details />
             },
             {
-                path: '/trailer/:id/videos', // Trailer path
+                path: 'trailer/:id/videos', 
                 element: <Details />
             },
             {
                 path: '*', 
-                element: <ErrorPage />
+                element: <ErrorPage /> 
             },
         ]
     },

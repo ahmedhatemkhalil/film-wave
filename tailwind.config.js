@@ -11,9 +11,12 @@ module.exports = {
         'medium-lg': { 'min': '768px', 'max': '1311px' },
         'md-363': '363px',
         'max-975': '975px',
-        '530': '530px'
+        '530': '530px',
+        'special-size': { 'min': '975px', 'max': '1023px' },
+
 
       },
+
       width: {
         '55': '55%',
         '22': '22%',
@@ -26,12 +29,11 @@ module.exports = {
       },
       backgroundImage: {
 
-        'heroImage': "url('/src/assets/cover.jpg')",
-        'movies': "url('/src/assets/cover 2.jpg')",
-        'series': "url('/src/assets/cover22.jpg')",
+        'movie-cover': 'url("/src/assets/cover2.jpg")',
+        'tv-cover': 'url("/src/assets/cover22.jpg")',
+        'footer-cover': 'url("/src/assets/footer-bg.jpg")',
         'custom-grad': "linear-gradient(to top, #0f0f0f, #00000000)",
-        'poster1': "url('/src/assets/poster3.jpg)",
-        'poster2': "url('/src/assets/poster-3.jpg)",
+
       }
 
     },

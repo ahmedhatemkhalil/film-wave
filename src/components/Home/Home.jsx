@@ -8,23 +8,48 @@ import HomeSlider from "./HomeSlider";
 import Loading from "../Loading/Loading";
 
 function Home() {
-  const { data: trendingMovies, isLoading: trendingMoviesLoading } =
-    useTrendingMovies();
-  const { data: trendingSeries, isLoading: trendingSeriesLoading } =
-    useTrendingSeries();
-  const { data: upComingMovies, isLoading: upComingMoviesLoading } =
-    useUpComingMovies();
-  const { data: tvSeriesAiringToday, isLoading: tvSeriesAiringTodayLoading } =
-    useTVSeriesAiringToday();
+  const {
+    data: trendingMovies,
+    isLoading: trendingMoviesLoading,
+    error: trendingMoviesError,
+  } = useTrendingMovies();
+  const {
+    data: trendingSeries,
+    isLoading: trendingSeriesLoading,
+    error: trendingSeriesError,
+  } = useTrendingSeries();
+  const {
+    data: upComingMovies,
+    isLoading: upComingMoviesLoading,
+    error: upComingMoviesError,
+  } = useUpComingMovies();
+  const {
+    data: tvSeriesAiringToday,
+    isLoading: tvSeriesAiringTodayLoading,
+    error: tvSeriesAiringTodayError,
+  } = useTVSeriesAiringToday();
 
-  const isLoading =
-    trendingMoviesLoading ||
-    trendingSeriesLoading ||
-    upComingMoviesLoading ||
-    tvSeriesAiringTodayLoading;
+  const loadingFlag = [
+    trendingMoviesLoading,
+    trendingSeriesLoading,
+    upComingMoviesLoading,
+    tvSeriesAiringTodayLoading,
+  ];
+  const errorFlag = [
+    trendingMoviesError,
+    trendingSeriesError,
+    upComingMoviesError,
+    tvSeriesAiringTodayError,
+  ];
+
+  const isLoading = loadingFlag.includes(true);
+  const isError = errorFlag.includes(true);
 
   if (isLoading) {
     return <Loading />;
+  }
+  if (isError) {
+    return <div>Error fetching details: {isError.message}</div>;
   }
 
   return (
@@ -38,21 +63,25 @@ function Home() {
             data={trendingMovies}
             category="Trending Movies"
             mediaType="movie"
+            type="home"
           />
           <CategorySection
             data={trendingSeries}
             category="Trending TV Series"
             mediaType="series"
+            type="home"
           />
           <CategorySection
             data={upComingMovies}
             category="Upcoming Movies"
             mediaType="movie"
+            type="home"
           />
           <CategorySection
             data={tvSeriesAiringToday}
             category="TV Series Airing Today"
             mediaType="tv"
+            type="home"
           />
         </div>
       </section>

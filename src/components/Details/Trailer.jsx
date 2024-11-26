@@ -1,6 +1,9 @@
 import React from "react";
-
-function Trailer({ trailerKey, title  }) {
+import Loading from "../Loading/Loading";
+function Trailer({ trailerKey, title, loadingTrailer }) {
+  if (loadingTrailer) {
+    <Loading />;
+  }
   return (
     <>
       {trailerKey && (

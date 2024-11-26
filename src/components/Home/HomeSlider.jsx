@@ -1,25 +1,25 @@
 import React from "react";
 import Slider from "react-slick";
 import PosterImage from "../PosterImage/PosterImage";
-import { Film, Info } from "react-feather";
 import { useAllMoviesAndSeries } from "../Apis/MovieApi";
 import { useNavigate } from "react-router-dom";
 import Trailer from "../Details/Trailer";
 import { useTrailer } from "../Apis/ApiFetching";
 import { Dialog, DialogPanel } from "@headlessui/react";
 import { X } from "react-feather";
+import Loading from "../Loading/Loading";
+import MovieInfo from "./SliderInfo";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import Loading from "../Loading/Loading";
 
 export default function HomeSlider() {
   const navigate = useNavigate();
   const { data: movies, isLoading: moviesLoading } = useAllMoviesAndSeries();
   const [activeTrailer, setActiveTrailer] = React.useState(null);
   const [activeMovieOrSeries, setActiveMovieOrSeries] = React.useState(null);
-  let [isOpen, setIsOpen] = React.useState(false);
+  const [isOpen, setIsOpen] = React.useState(false);
 
-  const displayedMovies = movies?.slice(0, 5);
+  const displayedMovies = React.useMemo(() => movies?.slice(0, 5), [movies]);
   var settings = {
     dots: false,
     speed: 500,
@@ -35,11 +35,13 @@ export default function HomeSlider() {
   function handleMoreInfo(type, id) {
     navigate(`/details/${type}/${id}`);
   }
+
   function handleWatchTrailer(type, id, movie) {
     setActiveMovieOrSeries(movie);
     setActiveTrailer({ type, id });
     setIsOpen(true);
   }
+
   const handleCloseModal = () => {
     setIsOpen(false);
     setActiveTrailer(null);
@@ -49,6 +51,7 @@ export default function HomeSlider() {
     activeTrailer?.type,
     activeTrailer?.id
   );
+
   const trailerKey = trailerData?.results?.find(
     (video) => video?.type === "Trailer"
   )?.key;
@@ -60,7 +63,6 @@ export default function HomeSlider() {
   return (
     <Slider {...settings}>
       {displayedMovies?.map((movie) => {
-        console.log(movie, "movie movie");
         const posterImage = `https://image.tmdb.org/t/p/original/${movie.poster_path}`;
         const backgroundImage = `https://image.tmdb.org/t/p/original/${movie.backdrop_path}`;
 
@@ -70,42 +72,19 @@ export default function HomeSlider() {
               style={{ backgroundImage: `url(${backgroundImage})` }}
               className=" min-h-[60vh] sm:min-h-[70vh]  md:min-h-screen  bg-cover bg-center relative flex items-center   "
             >
-              <div className=" layer absolute bg-black opacity-50 inset-0 z-0 "></div>
+              <div className=" layer absolute bg-black opacity-50 inset-0 w-full h-full z-0 "></div>
               <div className=" content gap-5 sm:gap-3  medium-lg:w-full  w-full md:w-3/4  mx-auto px-8 sm:px-16 flex justify-between z-10">
                 {/* Left section with movie info */}
 
-                <div className="first mt-20 md:mt-0  w-full md:w-3/4 text-white medium-lg:w-full   flex flex-col justify-center">
-                  <div className="mt-5 ">
-                    <h1 className=" text-2xl sm:text-3xl md:text-5xl font-medium">
-                      {movie.title || movie.name}
-                    </h1>
-                  </div>
-                  <div className="mt-5">
-                    <p className="  w-3/4">{movie.overview}</p>
-                  </div>
-                  {/* Buttons */}
-                  <div className="buttons flex flex-col tablet:flex-row mt-6  w-full  md:w-2/3    ">
-                    <button
-                      onClick={() => handleMoreInfo(movie.media_type, movie.id)}
-                      className=" hover:text-main-color transition-all ease-in-out duration-300 flex items-center justify-center tablet:my-0  border-none text-black py-2 tablet:py-3 px-8 tablet:px-2 tablet:w-[27%]  text-center my-1 cursor-pointer bg-white "
-                    >
-                      <Info size={30} className="mr-4" />
-                      More Info
-                    </button>
-                    <button
-                      onClick={() =>
-                        handleWatchTrailer(movie.media_type, movie.id, movie)
-                      }
-                      className=" flex items-center justify-center my-3 tablet:my-0  py-2 md:w-2/3 pl-7 pr-3    border-none text-black   text-center  tablet:ml-5  cursor-pointer bg-white opacity-50 "
-                    >
-                      <Film size={30} className="mr-4" />
-                      Watch Trailer
-                    </button>
-                  </div>
-                </div>
+                <MovieInfo
+                  movie={movie}
+                  handleMoreInfo={handleMoreInfo}
+                  handleWatchTrailer={handleWatchTrailer}
+                />
                 <Dialog
                   open={isOpen}
                   onClose={handleCloseModal}
+                  aria-label="Close trailer modal"
                   className="relative z-50"
                 >
                   <div
@@ -139,7 +118,11 @@ export default function HomeSlider() {
                   </div>
                 </Dialog>
                 {/* Right section with image */}
-                <PosterImage poster={posterImage} classes="swipe" />
+                <PosterImage
+                  poster={posterImage}
+                  altName={movie.name}
+                  classes="swipe"
+                />
               </div>
             </div>
           </div>

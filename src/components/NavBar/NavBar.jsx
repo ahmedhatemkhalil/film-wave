@@ -25,7 +25,8 @@ function NavBar() {
             <button
               className="md:hidden  cursor-pointer text-white"
               onClick={toggleMenu}
-              
+              aria-label={isOpen ? "Close menu" : "Open menu"}
+              aria-expanded={isOpen}
             >
               {isOpen ? (
                 <X
@@ -50,7 +51,7 @@ function NavBar() {
                 className="fixed inset-0  bg-black/70"
                 aria-hidden="true"
               ></div>
-              <div className="fixed inset-0 flex items-start justify-start">
+              <div className="fixed inset-0 flex items-start justify-start transform transition-transform duration-300">
                 <DialogPanel className=" mt-3 w-65 bg-black text-gray-400 p-6 h-full shadow-lg">
                   <ul className="  flex flex-col gap-4">
                     {menuItems.map((item, index) => (
@@ -67,7 +68,7 @@ function NavBar() {
             <Link to={"/"}>
               <img
                 src={logo}
-                alt="logo"
+                alt="App Logo"
                 className="w-28 md:w-36 h-auto object-contain"
               />
             </Link>

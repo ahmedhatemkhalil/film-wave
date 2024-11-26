@@ -6,7 +6,10 @@ function GridItems({ name, date, posterImage, rate, type, id, altText }) {
 
   return (
     <>
-      <Link to={`/details/${type}/${id}`}>
+      <Link
+        to={`/details/${type}/${id}`}
+        aria-label={`view details for ${name}`}
+      >
         <div className=" poster  cursor-pointer mt-6   relative group">
           <div className=" relative ">
             <img
@@ -15,13 +18,14 @@ function GridItems({ name, date, posterImage, rate, type, id, altText }) {
               alt={altText}
             />
             <div className="shadow-layer absolute inset-0 bg-black opacity-35 group-hover:opacity-60 transition duration-300"></div>
-
-            <div className="rating-circle absolute bottom-6 left-2 w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-300">
-              <span className=" text-white text-sm font-semibold">
-                {" "}
-                {roundedRate}{" "}
-              </span>
-            </div>
+            {roundedRate ? (
+              <div className="rating-circle absolute bottom-6 left-2 w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-300">
+                <span className=" text-white text-sm font-semibold">
+                  {" "}
+                  {roundedRate}{" "}
+                </span>
+              </div>
+            ) : null}
           </div>
           <div className="poster-details flex flex-col  mt-4 ">
             <h2 className=" text-white "> {name} </h2>
@@ -32,5 +36,15 @@ function GridItems({ name, date, posterImage, rate, type, id, altText }) {
     </>
   );
 }
+
+GridItems.defaultProp = {
+  name: "Untitled",
+  date: "Unknown date",
+  posterImage: defaultPhoto,
+  rate: null,
+  type: "unknown",
+  id: 0,
+  altText: "Default poster image",
+};
 
 export default GridItems;

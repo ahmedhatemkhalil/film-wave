@@ -11,7 +11,7 @@ import Loading from "../Loading/Loading";
 import defaultPhoto from "../../assets/image-placeholder.png";
 
 function Series() {
-  const [isSearching, setIsSearching] = React.useState();
+  const [isSearching, setIsSearching] = React.useState(false);
   const [series, setSeries] = React.useState([]);
   const { type = "popular" } = useParams();
   const endpoint = type === "trending" ? "trending" : "tv";
@@ -67,7 +67,7 @@ function Series() {
             dataLength={series?.length || defaultSeries?.length}
             next={fetchNextPage}
             hasMore={!!hasNextPage}
-            loader={<h4>Loading...</h4>}
+            loader={<Loading />}
           >
             {isSearching ? (
               <p className=" text-white text-xl">
@@ -75,23 +75,24 @@ function Series() {
               </p>
             ) : (
               <div className="   movie grid grid-cols-2 530:grid-cols-3  gap-x-10 530:gap-x-6 md:gap-x-10 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-7 gap-y-2 sm:gap-y-10 ">
-                {(series?.length > 0 ? series : defaultSeries).map((show) => (
-                  <GridItems
-                    type="tv"
-                    id={show?.id}
-                    series={show}
-                    rate={show?.vote_average}
-                    key={show?.id}
-                    posterImage={
-                      show.poster_path
-                        ? `https://image.tmdb.org/t/p/original${show.poster_path}`
-                        : defaultPhoto
-                    }
-                    name={show?.name}
-                    date={show?.first_air_date}
-                    altText={show?.name || "Series image"}
-                  />
-                ))}
+                {(series?.length > 0 ? series : defaultSeries).map(
+                  ({ id, vote_average, poster_path, name, first_air_date }) => (
+                    <GridItems
+                      type="tv"
+                      id={id}
+                      rate={vote_average}
+                      key={id}
+                      posterImage={
+                        poster_path
+                          ? `https://image.tmdb.org/t/p/original${poster_path}`
+                          : defaultPhoto
+                      }
+                      name={name}
+                      date={first_air_date}
+                      altText={name || `Image for ${name || "series"}`}
+                    />
+                  )
+                )}
               </div>
             )}
           </InfiniteScroll>

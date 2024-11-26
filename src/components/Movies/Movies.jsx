@@ -13,7 +13,7 @@ function Movies() {
   const [isSearching, setIsSearching] = React.useState(false);
   const { type = "popular" } = useParams();
   const endpoint = type === "trending" ? "trending" : "movie";
-  const { data, isLoading, fetchNextPage, hasNextPage } = useMovieList(
+  const { data, isLoading, fetchNextPage, hasNextPage, error } = useMovieList(
     endpoint,
     endpoint === "trending" ? "day" : type
   );
@@ -21,14 +21,19 @@ function Movies() {
   const defaultMovies = React.useMemo(() => {
     return data?.pages.flatMap((page) => page.results) || [];
   }, [data]);
+
   if (isLoading) {
     return <Loading />;
+  }
+  if (error) {
+    return <div>Error fetching details: {error.message}</div>;
   }
 
   const handleSearch = (results) => {
     setMovies(results || []);
     setIsSearching(results === null);
   };
+
   return (
     <>
       <HeroBanner kind="movie" />
@@ -37,9 +42,13 @@ function Movies() {
           <h2 className=" text-3xl md:text-4xl text-white font-medium">
             Movies
           </h2>
-          <ul className=" flex flex-wrap gap-y-2 gap-x-6 text-xl text-white">
+          <ul
+            role="menu"
+            className=" flex flex-wrap gap-y-2 gap-x-6 text-xl text-white"
+          >
             {movieLists.map(({ path, text, id }) => (
               <li
+                role="menuitem"
                 className=" hover:text-mainColor duration-300 transition-all"
                 key={id}
               >
@@ -61,24 +70,27 @@ function Movies() {
             dataLength={movies.length || defaultMovies.length}
             next={fetchNextPage}
             hasMore={!!hasNextPage}
-            loader={<h4>Loading...</h4>}
+            loader={<Loading />}
           >
             {isSearching ? (
-              <p>Couldn't find anything related to your search query.</p>
+              <p className="text-white text-xl">
+                Couldn't find anything related to your search query.
+              </p>
             ) : (
               <div className="   movie grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7 gap-10">
-                {(movies?.length > 0 ? movies : defaultMovies).map((movie) => (
-                  <GridItems
-                    type="movie"
-                    id={movie?.id}
-                    movie={movie}
-                    rate={movie?.vote_average}
-                    key={movie?.id}
-                    posterImage={`https://image.tmdb.org/t/p/w500${movie?.poster_path}`}
-                    name={movie?.title}
-                    date={movie?.release_date}
-                  />
-                ))}
+                {(movies?.length > 0 ? movies : defaultMovies).map(
+                  ({ id, vote_average, poster_path, title, release_date }) => (
+                    <GridItems
+                      type="movie"
+                      id={id}
+                      rate={vote_average}
+                      key={id}
+                      posterImage={`https://image.tmdb.org/t/p/w500${poster_path}`}
+                      name={title}
+                      date={release_date}
+                    />
+                  )
+                )}
               </div>
             )}
           </InfiniteScroll>

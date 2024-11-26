@@ -1,6 +1,6 @@
 import axios from "axios";
 import React from "react";
-import { Search } from "react-feather";
+import { Search, X } from "react-feather";
 import { API_BASE_URL, AUTH_HEADER } from "./../Apis/ApiFetching";
 
 function SearchBar({ setResults, searchType }) {
@@ -32,9 +32,7 @@ function SearchBar({ setResults, searchType }) {
       <div className="max-w-sm flex items-center relative">
         <Search
           className={`absolute left-4  ${
-            isFocused
-              ? "text-mainColor  "
-              : "text-gray-500 "
+            isFocused ? "text-mainColor  " : "text-gray-500 "
           }`}
           strokeWidth={4}
           size={15}
@@ -48,11 +46,28 @@ function SearchBar({ setResults, searchType }) {
           type="text"
           placeholder="...Search"
           className={`${
-            isFocused ? "placeholder-transparent ease-in-out duration-300 transition-all pl-10" : "pl-10"
+            isFocused
+              ? "placeholder-transparent ease-in-out duration-300 transition-all pl-10"
+              : "pl-10"
           } w-full text-lg py-1 border-0 focus:border-0 focus:outline-none`}
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
+
         />
+        
+        {searchTerm && (
+          <button
+            onClick={() => {
+              setSearchTerm("");
+              setResults([]);
+            }}
+            className=" hover:text-mainColor absolute right-4 text-gray-500"
+            aria-label="Clear search"
+
+          >
+            <X/>
+          </button>
+        )}
       </div>
     </>
   );

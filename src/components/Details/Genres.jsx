@@ -4,12 +4,12 @@ function Genres({ genres }) {
   return (
     <>
       <div className="flex flex-wrap gap-2">
-        {genres?.map((genre) => (
+        {genres?.map(({id , name}) => (
           <span
-            key={genre?.id}
+            key={id}
             className="h-fit px-4 py-1 text-gray-200 text-sm bg-mainColor rounded-3xl"
           >
-            {genre?.name}
+            {name}
           </span>
         ))}
       </div>
