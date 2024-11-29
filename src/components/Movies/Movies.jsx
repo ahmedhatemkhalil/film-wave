@@ -1,17 +1,26 @@
 import React from "react";
 import HeroBanner from "../HeroBanner/HeroBanner";
 import { movieLists } from "../../data/series and movies lists";
-import { NavLink, useParams } from "react-router-dom";
+import { NavLink, useNavigate, useParams } from "react-router-dom";
 import GridItems from "../GridItems/GridItems";
 import SearchBar from "../SearchBar/SearchBar";
 import InfiniteScroll from "./../../../node_modules/react-infinite-scroll-component/dist/index.es";
 import { useMovieList } from "../Apis/MovieApi.js";
 import Loading from "../Loading/Loading.jsx";
+import defaultPhoto from "../../assets/image-placeholder.png";
+
 
 function Movies() {
+  
   const [movies, setMovies] = React.useState([]);
   const [isSearching, setIsSearching] = React.useState(false);
-  const { type = "popular" } = useParams();
+  const { type } = useParams();
+  const navigate = useNavigate();
+  React.useEffect(() => {
+    if (!type) {
+      navigate("/movies/popular", { replace: true });
+    }
+  }, [type, navigate]);
   const endpoint = type === "trending" ? "trending" : "movie";
   const { data, isLoading, fetchNextPage, hasNextPage, error } = useMovieList(
     endpoint,
@@ -69,10 +78,11 @@ function Movies() {
           <InfiniteScroll
             dataLength={movies.length || defaultMovies.length}
             next={fetchNextPage}
-            hasMore={!!hasNextPage}
+            hasMore={!!hasNextPage && !isSearching}
+            
             loader={<Loading />}
           >
-            {isSearching ? (
+            {isSearching && movies.length === 0 ? (
               <p className="text-white text-xl">
                 Couldn't find anything related to your search query.
               </p>
@@ -85,8 +95,13 @@ function Movies() {
                       id={id}
                       rate={vote_average}
                       key={id}
-                      posterImage={`https://image.tmdb.org/t/p/w500${poster_path}`}
+                      posterImage={
+                        poster_path
+                          ? `https://image.tmdb.org/t/p/original${poster_path}`
+                          : defaultPhoto
+                      }
                       name={title}
+                      isLoading={isLoading}
                       date={release_date}
                     />
                   )

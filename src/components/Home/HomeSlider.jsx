@@ -8,7 +8,7 @@ import { useTrailer } from "../Apis/ApiFetching";
 import { Dialog, DialogPanel } from "@headlessui/react";
 import { X } from "react-feather";
 import Loading from "../Loading/Loading";
-import MovieInfo from "./SliderInfo";
+import MovieInfo from "./MovieInfo";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
@@ -22,14 +22,15 @@ export default function HomeSlider() {
   const displayedMovies = React.useMemo(() => movies?.slice(0, 5), [movies]);
   var settings = {
     dots: false,
-    speed: 500,
+    speed: 1000,
     infinite: true,
     slidesToShow: 1,
     slidesToScroll: 1,
-    autoplaySpeed: 2000,
+    autoplaySpeed: 3000,
     arrows: false,
     autoplay: true,
     fade: true,
+    pauseOnHover: false,
   };
 
   function handleMoreInfo(type, id) {
@@ -73,7 +74,8 @@ export default function HomeSlider() {
               className=" min-h-[60vh] sm:min-h-[70vh]  md:min-h-screen  bg-cover bg-center relative flex items-center   "
             >
               <div className=" layer absolute bg-black opacity-50 inset-0 w-full h-full z-0 "></div>
-              <div className=" content gap-5 sm:gap-3  medium-lg:w-full  w-full md:w-3/4  mx-auto px-8 sm:px-16 flex justify-between z-10">
+
+              <div className="  content gap-5 sm:gap-8    w-full md:w-full xl:w-[90%] 2xl:w-3/4   mx-auto px-8 sm:px-16 flex z-10">
                 {/* Left section with movie info */}
 
                 <MovieInfo
@@ -93,13 +95,13 @@ export default function HomeSlider() {
                   ></div>
 
                   <div className="fixed inset-0 flex w-screen items-center justify-center p-4">
-                    <DialogPanel className="w-full max-w-xs sm:max-w-md md:max-w-lg lg:max-w-2xl xl:max-w-4xl space-y-4 border bg-white p-6 md:p-12 relative">
+                    <DialogPanel className="w-full max-w-xs sm:max-w-md md:max-w-xl lg:max-w-2xl xl:max-w-4xl space-y-6 md:space-y-4 border bg-white p-2 md:p-4 lg:p-6 xl:p-8 relative">
                       <button
-                        className="absolute top-3 right-3 text-black text-xl"
+                        className="absolute top-0 lg:top-2 right-0 lg:right-4 xl:right-6 text-black text-xl"
                         onClick={handleCloseModal}
                       >
                         {" "}
-                        <X size={40} />{" "}
+                        <X size={30} />{" "}
                       </button>
                       {trailerKey ? (
                         <Trailer

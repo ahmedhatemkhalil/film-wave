@@ -3,7 +3,7 @@ import HeroBanner from "./../HeroBanner/HeroBanner";
 import SearchBar from "../SearchBar/SearchBar";
 import GridItems from "../GridItems/GridItems";
 import { seriesLists } from "../../data/series and movies lists";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import InfiniteScroll from "./../../../node_modules/react-infinite-scroll-component/dist/index.es";
 import { useParams } from "react-router-dom";
 import { useSeriesList } from "../Apis/SeriesApi";
@@ -13,7 +13,15 @@ import defaultPhoto from "../../assets/image-placeholder.png";
 function Series() {
   const [isSearching, setIsSearching] = React.useState(false);
   const [series, setSeries] = React.useState([]);
-  const { type = "popular" } = useParams();
+  const { type } = useParams();
+  const navigate = useNavigate();
+
+  React.useEffect(() => {
+    if (!type) {
+      navigate("/tv/popular", { replace: true });
+    }
+  }, [type, navigate]);
+  
   const endpoint = type === "trending" ? "trending" : "tv";
   const { data, isLoading, fetchNextPage, hasNextPage, error } = useSeriesList(
     endpoint,
@@ -66,10 +74,10 @@ function Series() {
           <InfiniteScroll
             dataLength={series?.length || defaultSeries?.length}
             next={fetchNextPage}
-            hasMore={!!hasNextPage}
-            loader={<Loading />}
+            hasMore={!!hasNextPage && !isSearching}
+            loader={!isSearching && !!hasNextPage && <Loading />}
           >
-            {isSearching ? (
+            {isSearching && series.length === 0 ? (
               <p className=" text-white text-xl">
                 Couldn't find anything related to your search query.
               </p>

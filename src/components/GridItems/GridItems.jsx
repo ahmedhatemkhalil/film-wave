@@ -1,9 +1,20 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import defaultPhoto from "../../assets/image-placeholder.png";
-function GridItems({ name, date, posterImage, rate, type, id, altText }) {
+
+function GridItems({
+  name,
+  date,
+  posterImage,
+  rate,
+  type,
+  id,
+  altText,
+  isLoading,
+}) {
   const roundedRate = rate ? parseFloat(rate?.toFixed(1)) : null;
 
+ 
   return (
     <>
       <Link
@@ -36,15 +47,5 @@ function GridItems({ name, date, posterImage, rate, type, id, altText }) {
     </>
   );
 }
-
-GridItems.defaultProp = {
-  name: "Untitled",
-  date: "Unknown date",
-  posterImage: defaultPhoto,
-  rate: null,
-  type: "unknown",
-  id: 0,
-  altText: "Default poster image",
-};
 
 export default GridItems;

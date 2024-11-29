@@ -86,7 +86,7 @@ function Details() {
           <div className="first-section">
             <PosterImage poster={poster} classes="details" />
           </div>
-          <div className="second-section flex flex-col gap-8 max-w-4xl">
+          <div className="second-section flex flex-col gap-12 md:gap-8 max-w-4xl">
             <div className="flex flex-col gap-5">
               {/* Title and Rating */}
               <div className="flex items-center gap-3">

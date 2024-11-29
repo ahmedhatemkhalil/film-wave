@@ -8,7 +8,7 @@ function Trailer({ trailerKey, title, loadingTrailer }) {
     <>
       {trailerKey && (
         <div className="trailer flex flex-col items-center">
-          <div className="max-w-5xl w-full">
+          <div className="max-w-full  md:max-w-5xl w-full">
             <iframe
               src={`https://www.youtube.com/embed/${trailerKey}`}
               className="aspect-video"

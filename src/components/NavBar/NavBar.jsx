@@ -45,21 +45,28 @@ function NavBar() {
             <Dialog
               open={isOpen}
               onClose={() => setIsOpen(false)}
-              className="relative z-50"
+              className="relative  block md:hidden z-[200]"
             >
               <div
                 className="fixed inset-0  bg-black/70"
                 aria-hidden="true"
               ></div>
-              <div className="fixed inset-0 flex items-start justify-start transform transition-transform duration-300">
-                <DialogPanel className=" mt-3 w-65 bg-black text-gray-400 p-6 h-full shadow-lg">
-                  <ul className="  flex flex-col gap-4">
+              <div className="fixed inset-0 w-[58%] flex items-start justify-start transform transition-transform duration-300">
+                <DialogPanel className=" pb-20 flex flex-col justify-between   bg-black text-gray-400 p-6 h-full shadow-lg">
+                  <ul className=" mt-2  flex flex-col gap-4">
                     {menuItems.map((item, index) => (
                       <li key={index} onClick={() => setIsOpen(false)}>
                         <NavItems {...item} />
                       </li>
                     ))}
                   </ul>
+                  <button
+                    className="  w-full flex items-center justify-center  text-white bg-red-600  py-2 rounded"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    <X size={20} className=" mr-1" />
+                    Dismiss
+                  </button>
                 </DialogPanel>
               </div>
             </Dialog>
@@ -74,7 +81,7 @@ function NavBar() {
             </Link>
 
             {/* Desktop Menu Items */}
-            <ul className="hidden md:flex gap-8 text-gray-400 text-xl">
+            <ul className="hidden md:flex gap-8  text-xl">
               {menuItems.map((item, index) => (
                 <NavItems key={index} {...item} />
               ))}

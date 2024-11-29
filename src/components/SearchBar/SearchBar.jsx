@@ -7,6 +7,8 @@ function SearchBar({ setResults, searchType }) {
   const [isFocused, setIsFocused] = React.useState(false);
   const [searchTerm, setSearchTerm] = React.useState("");
 
+ 
+
   async function getSearchFetch() {
     if (!searchTerm.trim()) {
       setResults([]);
@@ -52,9 +54,8 @@ function SearchBar({ setResults, searchType }) {
           } w-full text-lg py-1 border-0 focus:border-0 focus:outline-none`}
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
-
         />
-        
+
         {searchTerm && (
           <button
             onClick={() => {
@@ -63,9 +64,8 @@ function SearchBar({ setResults, searchType }) {
             }}
             className=" hover:text-mainColor absolute right-4 text-gray-500"
             aria-label="Clear search"
-
           >
-            <X/>
+            <X />
           </button>
         )}
       </div>
