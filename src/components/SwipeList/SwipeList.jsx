@@ -3,18 +3,24 @@ import Rating from "../Rating/Rating";
 import { Link } from "react-router-dom";
 import defaultPhoto from "../../assets/image-placeholder.png";
 import clsx from "clsx";
+import "react-loading-skeleton/dist/skeleton.css";
 
 const sharedClasses =
   "movie  flex overflow-x-auto whitespace-nowrap scrollbar-hide gap-8 ";
 const detailsSpecificClasses = " pb-32";
 const swipeSpecificClasses = "pb-8 mt-3";
 
-function SwipeList({ data, mediaType, type }) {
+function SwipeList({ data, mediaType, type, isLoading }) {
+  console.log("swipe re-rendered");
+
   const specificClasses = clsx([
     sharedClasses,
     (type = "details" ? detailsSpecificClasses : swipeSpecificClasses),
   ]);
   const getPosterTitle = (poster) => poster.title || poster.name || "Untitled";
+
+
+
   return (
     <>
       <div className={specificClasses}>
@@ -33,7 +39,7 @@ function SwipeList({ data, mediaType, type }) {
                     className=" w-full h-full object-cover"
                     loading="lazy"
                   />
-                  <div className="shadow-layer absolute inset-0 bg-black opacity-35 group-hover:opacity-60 transition duration-300"></div>
+                  <div className="shadow-layer absolute inset-0 bg-black opacity-0 group-hover:opacity-70 transition duration-300"></div>
                   {/* Rating  */}
                   <Rating rate={vote_average} type="swipe" />
                   <div className="poster-details text-white ">
@@ -51,4 +57,4 @@ function SwipeList({ data, mediaType, type }) {
   );
 }
 
-export default SwipeList;
+export default React.memo(SwipeList);

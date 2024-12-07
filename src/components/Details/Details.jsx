@@ -1,8 +1,10 @@
 import React from "react";
 import PosterImage from "../PosterImage/PosterImage";
 import Rating from "./../Rating/Rating";
-import { useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import BackdropCover from "../BackdropCover/BackdropCover";
+import defaultPhoto from "../../assets/image-placeholder.png";
+
 import {
   useDetails,
   useTrailer,
@@ -18,6 +20,12 @@ import Trailer from "./Trailer";
 import Loading from "../Loading/Loading";
 
 function Details() {
+  const location = useLocation();
+
+  React.useEffect(() => {
+    window.scrollTo(0, 0); 
+  }, [location]);
+  const navigate = useNavigate()
   const { id, type } = useParams();
   const {
     data: detailsData,
@@ -59,16 +67,22 @@ function Details() {
     );
   }
   if (isError) {
-    return <div>Error fetching details: {isError.message}</div>;
+    navigate("/404");
+    return null;
   }
-  // Extract trailer key for embedding YouTube
+ 
   const trailerKey = trailerData?.results?.find(
     (video) => video?.type === "Trailer"
   )?.key;
 
-  const title = type === "tv" ? detailsData?.name || "Unknown TV Show"  : detailsData?.title || "Unknown Movie";
+  const title =
+    type === "tv"
+      ? detailsData?.name || "Unknown TV Show"
+      : detailsData?.title || "Unknown Movie";
 
-  const poster = `https://image.tmdb.org/t/p/original/${detailsData?.poster_path}`;
+  const poster = detailsData?.poster_path
+    ? `https://image.tmdb.org/t/p/original/${detailsData.poster_path}`
+    : null;
   const backdrop = detailsData?.backdrop_path;
 
   const processedRelatedData = relatedData?.results?.map((poster) => ({
@@ -78,22 +92,19 @@ function Details() {
   return (
     <>
       {/* Backdrop */}
-      <BackdropCover backgroundCover={backdrop} />
+      <BackdropCover backgroundCover={backdrop} poster={poster} />
 
       <div className=" px-6 sm:px-12  special-size:px-12 lg:px-16 py-6 md:py-12 flex flex-col gap-10 md:gap-9 text-white">
         {/* Main Details Section */}
         <div className="z-50 -mt-[26rem] flex justify-center max-975:gap-10">
           <div className="first-section">
-            <PosterImage poster={poster} classes="details" />
+            <PosterImage poster={poster || defaultPhoto} classes="details" />
           </div>
           <div className="second-section flex flex-col gap-12 md:gap-8 max-w-4xl">
             <div className="flex flex-col gap-5">
               {/* Title and Rating */}
               <div className="flex items-center gap-3">
-                <Rating
-                  rate={parseFloat(detailsData?.vote_average?.toFixed(1))}
-                  type="details"
-                />
+                <Rating rate={detailsData?.vote_average} type="details" />
                 <h2 className="text-3xl">{title}</h2>
               </div>
               {/* Genres */}
@@ -127,15 +138,15 @@ function Details() {
           title={type === "tv" ? detailsData?.name : detailsData?.title}
         />
         {/* Related Section */}
-       {processedRelatedData?.length > 0 && (
-        <CategorySection
-          type="details"
-          showButton={false}
-          category={type === "tv" ? "similar Tv Shows" : "similar movies"}
-          data={processedRelatedData}
-          rate={(relatedData?.results?.[0]?.vote_average || 0).toFixed(1)}
-        />
-       )}
+        {processedRelatedData?.length > 0 && (
+          <CategorySection
+            type="details"
+            showButton={false}
+            category={type === "tv" ? "similar Tv Shows" : "similar movies"}
+            data={processedRelatedData}
+            rate={relatedData?.results?.vote_average}
+          />
+        )}
       </div>
     </>
   );

@@ -9,7 +9,10 @@ function CategorySection({
   showButton = true,
   mediaType,
   type,
+  isLoading
 }) {
+  console.log('category re-rendered');
+
   const navigate = useNavigate();
 
   const handleViewMore = () => {
@@ -27,14 +30,13 @@ function CategorySection({
 
   const sharedClasses = " text-white text-sm  sm:text-xl md:text-2xl ";
   const detailsSpecificClasses = " text-xl";
-  const swipeSpecificClasses = " mt-3 mb-3 md:mb-10";
+  const swipeSpecificClasses = " mt-1 mb-3 md:mb-10";
 
   const specificClasses = clsx([
     sharedClasses,
     type === "details" ? detailsSpecificClasses : swipeSpecificClasses,
   ]);
 
-  //
   return (
     <>
       <div className={specificClasses}>
@@ -54,9 +56,9 @@ function CategorySection({
           )}
         </div>
       </div>
-      <SwipeList type={type} data={data} mediaType={mediaType} />
+      <SwipeList type={type} data={data} mediaType={mediaType} isLoading={isLoading} />
     </>
   );
 }
 
-export default CategorySection;
+export default React.memo(CategorySection);

@@ -7,12 +7,13 @@ import Trailer from "../Details/Trailer";
 import { useTrailer } from "../Apis/ApiFetching";
 import { Dialog, DialogPanel } from "@headlessui/react";
 import { X } from "react-feather";
-import Loading from "../Loading/Loading";
 import MovieInfo from "./MovieInfo";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import Loading from "../Loading/Loading";
 
 export default function HomeSlider() {
+
   const navigate = useNavigate();
   const { data: movies, isLoading: moviesLoading } = useAllMoviesAndSeries();
   const [activeTrailer, setActiveTrailer] = React.useState(null);
@@ -38,6 +39,10 @@ export default function HomeSlider() {
   }
 
   function handleWatchTrailer(type, id, movie) {
+    if (!type || !id) {
+      console.error("Invalid parameters for trailer: type or id is missing.");
+      return;
+    }
     setActiveMovieOrSeries(movie);
     setActiveTrailer({ type, id });
     setIsOpen(true);
@@ -73,7 +78,7 @@ export default function HomeSlider() {
               style={{ backgroundImage: `url(${backgroundImage})` }}
               className=" min-h-[60vh] sm:min-h-[70vh]  md:min-h-screen  bg-cover bg-center relative flex items-center   "
             >
-              <div className=" layer absolute bg-black opacity-50 inset-0 w-full h-full z-0 "></div>
+              <div className=" layer absolute bg-black opacity-50 inset-0 w-full h-full z-0  "></div>
 
               <div className="  content gap-5 sm:gap-8    w-full md:w-full xl:w-[90%] 2xl:w-3/4   mx-auto px-8 sm:px-16 flex z-10">
                 {/* Left section with movie info */}
@@ -89,10 +94,7 @@ export default function HomeSlider() {
                   aria-label="Close trailer modal"
                   className="relative z-50"
                 >
-                  <div
-                    className="fixed inset-0 bg-black bg-opacity-35"
-                    aria-hidden="true"
-                  ></div>
+                  <div className="fixed inset-0 bg-black bg-opacity-35"></div>
 
                   <div className="fixed inset-0 flex w-screen items-center justify-center p-4">
                     <DialogPanel className="w-full max-w-xs sm:max-w-md md:max-w-xl lg:max-w-2xl xl:max-w-4xl space-y-6 md:space-y-4 border bg-white p-2 md:p-4 lg:p-6 xl:p-8 relative">
@@ -112,9 +114,7 @@ export default function HomeSlider() {
                           }
                         />
                       ) : (
-                        <p className="text-center text-black">
-                          Trailer not available.
-                        </p>
+                        <Loading />
                       )}
                     </DialogPanel>
                   </div>

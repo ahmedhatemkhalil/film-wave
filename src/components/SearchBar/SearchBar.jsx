@@ -2,32 +2,71 @@ import axios from "axios";
 import React from "react";
 import { Search, X } from "react-feather";
 import { API_BASE_URL, AUTH_HEADER } from "./../Apis/ApiFetching";
+import Loading from "../Loading/Loading";
 
 function SearchBar({ setResults, searchType }) {
   const [isFocused, setIsFocused] = React.useState(false);
+  const [isLoading, setIsLoading] = React.useState(false);
   const [searchTerm, setSearchTerm] = React.useState("");
+  const [isPasting, setIsPasting] = React.useState(false);
+  const fetchIndex = React.useRef(0);
 
- 
-
-  async function getSearchFetch() {
-    if (!searchTerm.trim()) {
+  async function getSearchFetch(term) {
+    console.log("Fetching with searchTerm:", term);
+    if (!term.trim()) {
       setResults([]);
+      console.log("No search term, clearing results.");
       return;
     }
+    setIsLoading(true);
     const endpoint = searchType === "movie" ? "movie" : "tv";
+
+    const currentFetchIndex = fetchIndex.current + 1;
+    fetchIndex.current = currentFetchIndex;
 
     try {
       const { data } = await axios.get(
-        `${API_BASE_URL}search/${endpoint}?include_adult=false&language=en-US&page=1&query=${searchTerm}`,
+        `${API_BASE_URL}search/${endpoint}?include_adult=false&language=en-US&page=1&query=${term}`,
         { headers: AUTH_HEADER }
       );
-
-      setResults(data?.results?.length ? data.results : null);
+      if (currentFetchIndex === fetchIndex.current) {
+        setResults(data?.results?.length ? data.results : null);
+      }
     } catch (error) {
-      console.error("Error fetching search results:", error);
-      setResults(null);
+      if (currentFetchIndex === fetchIndex.current) {
+        console.error("Error fetching search results:", error);
+        setResults(null);
+      }
+    } finally {
+      setIsLoading(false);
     }
   }
+  const handleChange = (e) => {
+    if (!isPasting) {
+      const { value } = e.target;
+      setSearchTerm(value);
+      getSearchFetch(value);
+    }
+  };
+
+  const handlePaste = (e) => {
+    e.preventDefault();
+    setIsPasting(true);
+    const value = e.clipboardData.getData("text").trim();
+    if (value) {
+      setSearchTerm(value);
+      getSearchFetch(value);
+    }
+
+    setTimeout(() => {
+      setIsPasting(false);
+    }, 100);
+  };
+
+  const handleClean = () => {
+    setSearchTerm("");
+    setResults([]);
+  };
 
   return (
     <>
@@ -41,27 +80,22 @@ function SearchBar({ setResults, searchType }) {
         />
         <input
           value={searchTerm}
-          onChange={(e) => {
-            setSearchTerm(e.target.value);
-            getSearchFetch();
-          }}
+          onChange={handleChange}
+          onPaste={handlePaste}
           type="text"
           placeholder="...Search"
           className={`${
             isFocused
               ? "placeholder-transparent ease-in-out duration-300 transition-all pl-10"
               : "pl-10"
-          } w-full text-lg py-1 border-0 focus:border-0 focus:outline-none`}
+          } w-full text-lg py-1 border-0 focus:border-0 focus:outline-none  `}
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
         />
 
         {searchTerm && (
           <button
-            onClick={() => {
-              setSearchTerm("");
-              setResults([]);
-            }}
+            onClick={handleClean}
             className=" hover:text-mainColor absolute right-4 text-gray-500"
             aria-label="Clear search"
           >
@@ -69,6 +103,7 @@ function SearchBar({ setResults, searchType }) {
           </button>
         )}
       </div>
+      {isLoading && <Loading />}
     </>
   );
 }

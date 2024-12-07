@@ -64,24 +64,31 @@ function Home() {
             category="Trending Movies"
             mediaType="movie"
             type="home"
+            isLoading= {isLoading}
           />
           <CategorySection
             data={trendingSeries}
             category="Trending TV Series"
             mediaType="series"
             type="home"
+            isLoading= {isLoading}
+
           />
           <CategorySection
             data={upComingMovies}
             category="Upcoming Movies"
             mediaType="movie"
             type="home"
+            isLoading= {isLoading}
+
           />
           <CategorySection
             data={tvSeriesAiringToday}
             category="TV Series Airing Today"
             mediaType="tv"
             type="home"
+            isLoading= {isLoading}
+
           />
         </div>
       </section>

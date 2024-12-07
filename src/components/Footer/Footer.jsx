@@ -1,6 +1,6 @@
 import React from "react";
 import logo from "../../assets/logo.png";
-import { Link, NavLink } from "react-router-dom";
+import {Link,  NavLink } from "react-router-dom";
 import { movieLists, seriesLists } from "../../data/series and movies lists";
 
 function Footer() {
@@ -24,7 +24,7 @@ function Footer() {
             </div>
             <div className="col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-5 md:gap-8">
               <div className="flex flex-col items-center lg:items-start gap-1.5 md:gap-3">
-                <h2 className="text-2xl md:text-3xl text-white">Movies</h2>
+                <h2 className="text-2xl md:text-3xl text-white" >Movies</h2>
                 <ul className="  w-full flex flex-col items-center lg:items-start gap-1 md:gap-2 text-lg md:text-xl text-gray-300">
                   {movieLists.map(({ id, path, text }) => (
                     <li

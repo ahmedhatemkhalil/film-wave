@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import defaultPhoto from "../../assets/image-placeholder.png";
+import Rating from "../Rating/Rating";
 
 function GridItems({
   name,
@@ -10,33 +11,27 @@ function GridItems({
   type,
   id,
   altText,
-  isLoading,
 }) {
   const roundedRate = rate ? parseFloat(rate?.toFixed(1)) : null;
 
- 
   return (
     <>
       <Link
         to={`/details/${type}/${id}`}
         aria-label={`view details for ${name}`}
       >
-        <div className=" poster  cursor-pointer mt-6   relative group">
+        <div className=" poster  cursor-pointer mt-6  relative group">
           <div className=" relative ">
             <img
-              className="aspect-[1/1.5] rounded-md"
+              className="aspect-[1/1.5] rounded-md  "
               src={posterImage || defaultPhoto}
               alt={altText}
             />
-            <div className="shadow-layer absolute inset-0 bg-black opacity-35 group-hover:opacity-60 transition duration-300"></div>
-            {roundedRate ? (
-              <div className="rating-circle absolute bottom-6 left-2 w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-300">
-                <span className=" text-white text-sm font-semibold">
-                  {" "}
-                  {roundedRate}{" "}
-                </span>
-              </div>
-            ) : null}
+            <div className="shadow-layer absolute inset-0 bg-black opacity-0 group-hover:opacity-70 transition duration-300"></div>
+
+            <div className="flex items-center gap-3">
+              <Rating rate={roundedRate} type="swipe" />
+            </div>
           </div>
           <div className="poster-details flex flex-col  mt-4 ">
             <h2 className=" text-white "> {name} </h2>

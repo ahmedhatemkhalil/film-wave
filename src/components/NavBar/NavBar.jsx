@@ -28,32 +28,25 @@ function NavBar() {
               aria-label={isOpen ? "Close menu" : "Open menu"}
               aria-expanded={isOpen}
             >
-              {isOpen ? (
-                <X
-                  size={40}
-                  className="transition-all   duration-300 ease-in-out "
-                />
-              ) : (
-                <Menu
-                  size={40}
-                  className="transition-all duration-300 ease-in-out"
-                />
-              )}
+              <Menu
+                size={40}
+                className="transition-all duration-300 ease-in-out"
+              />
             </button>
 
             {/* Mobile Menu Dialog */}
             <Dialog
               open={isOpen}
               onClose={() => setIsOpen(false)}
-              className="relative  block md:hidden z-[200]"
+              className="relative    block md:hidden z-[200]"
             >
               <div
                 className="fixed inset-0  bg-black/70"
                 aria-hidden="true"
               ></div>
-              <div className="fixed inset-0 w-[58%] flex items-start justify-start transform transition-transform duration-300">
-                <DialogPanel className=" pb-20 flex flex-col justify-between   bg-black text-gray-400 p-6 h-full shadow-lg">
-                  <ul className=" mt-2  flex flex-col gap-4">
+              <div className="fixed inset-0  flex items-start justify-start transform transition-transform duration-300">
+                <DialogPanel className=" pb-20 flex flex-col justify-between    bg-black text-gray-400 p-10 h-full shadow-lg">
+                  <ul className="   flex flex-col gap-4">
                     {menuItems.map((item, index) => (
                       <li key={index} onClick={() => setIsOpen(false)}>
                         <NavItems {...item} />

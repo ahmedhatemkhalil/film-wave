@@ -7,43 +7,49 @@ const AUTH_HEADER = {
 }
 // Handle special case for 'trending'
 const fetchMovie = async ({ pageParam = 1, endpoint, type }) => {
+    console.log('Type:', type); // Debug log
+
     try {
 
-        let url;
-
-        if (endpoint === "trending") {
-            const timeWindow = type || "day";
-            url = `${API_BASE_URL}trending/movie/${timeWindow}`;
+        let url
+        if (endpoint === 'trending') {
+            const timeWindow = type || 'day'
+            url = `${API_BASE_URL}trending/movie/${timeWindow}`
+        } else if (endpoint === 'movie') {
+            if (!type) {
+                type = 'popular'
+                throw new Error('Type must be provided when the endpoint is "movie".');
+            }
+            url = `${API_BASE_URL}movie/${type}?page=${pageParam}`;
         } else {
-            url = `${API_BASE_URL}${endpoint}${type ? `/${type}` : ''}`;
+            throw new Error('Invalid endpoint');
         }
 
+
+
         const { data } = await axios.get(url, {
-            params: { page: pageParam },
-            headers: AUTH_HEADER,
-        });
+            params: { page: pageParam, }, headers: AUTH_HEADER
+        })
 
         return {
             results: data?.results,
             nextPage: pageParam + 1,
             totalPage: data?.total_pages,
-        };
+        }
     } catch (error) {
         console.log(error, 'Error Fetching Data')
         throw new Error("An error occurred while fetching the data.");
     }
-};
-
+}
 export const useMovieList = (endpoint, type) => {
-    const typeValue = endpoint === 'trending' && !type ? 'day' : type;
-
-    return useInfiniteQuery(['fetchMovie', endpoint, type], ({ pageParam }) => fetchMovie({ pageParam, type: typeValue, endpoint }),
+    return useInfiniteQuery(['fetchMovie', endpoint, type], ({ pageParam }) => fetchMovie({ pageParam, type: endpoint === 'trending' && !type ? 'day' : type, endpoint }),
         {
             getNextPageParam: (lastPage) => {
                 return lastPage.nextPage <= lastPage.totalPage ? lastPage.nextPage : undefined;
             },
         })
 }
+
 // fetching for all
 const fetch = async (endpoint) => {
     try {

@@ -2,7 +2,7 @@ import React from "react";
 import Loading from "../Loading/Loading";
 function Trailer({ trailerKey, title, loadingTrailer }) {
   if (loadingTrailer) {
-    <Loading />;
+    return <Loading />;
   }
   return (
     <>

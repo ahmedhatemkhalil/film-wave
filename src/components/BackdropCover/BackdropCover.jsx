@@ -1,6 +1,6 @@
 import React from "react";
-function BackdropCover({ backgroundCover }) {
-  const backgroundImage = `url('https://image.tmdb.org/t/p/original/${backgroundCover}')`;
+function BackdropCover({ backgroundCover  , poster}) {
+  const backgroundImage = `url('https://image.tmdb.org/t/p/original/${backgroundCover || poster}')`;
 
   return (
     <>

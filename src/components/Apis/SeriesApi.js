@@ -8,15 +8,24 @@ const AUTH_HEADER = {
 //fetching series pages
 // Handle special case for 'trending'
 const fetchSeries = async ({ pageParam = 1, endpoint, type }) => {
+
     try {
 
         let url
         if (endpoint === 'trending') {
             const timeWindow = type || 'day'
             url = `${API_BASE_URL}trending/tv/${timeWindow}`
+        } else if (endpoint === 'tv') {
+            if (!type) {
+                type = 'popular'
+                throw new Error('Type must be provided when the endpoint is "tv".');
+            }
+            url = `${API_BASE_URL}tv/${type}?page=${pageParam}`;
         } else {
-            url = `${API_BASE_URL}${endpoint}${type ? `/${type}` : ''}`
+            throw new Error('Invalid endpoint');
         }
+        console.log('Constructed URL:', url);
+
 
         const { data } = await axios.get(url, {
             params: { page: pageParam, }, headers: AUTH_HEADER

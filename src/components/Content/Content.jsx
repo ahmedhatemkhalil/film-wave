@@ -1,79 +1,62 @@
-import React from "react";
-import HeroBanner from "../HeroBanner/HeroBanner";
-import { movieLists } from "../../data/series and movies lists";
-import { NavLink, useLocation, useParams } from "react-router-dom";
-import GridItems from "../GridItems/GridItems";
-import SearchBar from "../SearchBar/SearchBar";
-import Loading from "../Loading/Loading.jsx";
-import defaultPhoto from "../../assets/image-placeholder.png";
-import { useMovieList } from "./../Apis/MovieApi";
+import React from 'react'
+import HeroBanner from '../HeroBanner/HeroBanner'
+import { movieLists } from '../../data/series and movies lists'
+import { NavLink, useLocation } from 'react-router-dom'
+import SearchBar from '../SearchBar/SearchBar'
+import GridItems from '../GridItems/GridItems'
+import Loading from '../Loading/Loading'
 
-function Movies() {
-  const { type } = useParams();
-  const endpoint = type === "trending" ? "trending" : "movie";
-  const {
-    data,
-    isLoading,
-    error,
-    hasNextPage,
-    isFetchingNextPage,
-    fetchNextPage,
-  } = useMovieList(
-    endpoint,
-    endpoint === "trending" ? "day" : type || "popular"
-  );
+
+function Content() {
+    
+    const location = useLocation();
+
+    React.useEffect(() => {
+      window.scrollTo(0, 0); 
+    }, [location]);
+    const [movies, setMovies] = React.useState([]);
+    const [isSearching, setIsSearching] = React.useState(false);
+    const [isPaused, setIsPaused] = React.useState(false);
+    const observerRef = React.useRef();
+    
+    
+    React.useEffect(() => {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          if (
+            entries[0].isIntersecting &&
+            hasNextPage &&
+            !isFetchingNextPage &&
+            !isPaused
+          ) {
+            fetchNextPage();
+          }
+        },
+        { threshold: 1 }
+      );
   
-  const defaultMovies = data?.pages.flatMap((page) => page.results) || [];
-  const location = useLocation();
-
-  React.useEffect(() => {
-    window.scrollTo(0, 0); 
-  }, [location]);
-  const [movies, setMovies] = React.useState([]);
-  const [isSearching, setIsSearching] = React.useState(false);
-  const [isPaused, setIsPaused] = React.useState(false);
-  const observerRef = React.useRef();
+      if (observerRef.current) observer.observe(observerRef.current);
   
+      return () => {
+        observer.disconnect();
+      };
+    }, [hasNextPage, isFetchingNextPage, fetchNextPage, isPaused]);
   
-  React.useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (
-          entries[0].isIntersecting &&
-          hasNextPage &&
-          !isFetchingNextPage &&
-          !isPaused
-        ) {
-          fetchNextPage();
-        }
-      },
-      { threshold: 1 }
-    );
-
-    if (observerRef.current) observer.observe(observerRef.current);
-
-    return () => {
-      observer.disconnect();
+    if (isLoading && !isFetchingNextPage) {
+      return <Loading />;
+    }
+    if (error) {
+      return <div>Error fetching details: {error.message}</div>;
+    }
+  
+    const handleSearch = (results) => {
+      setMovies(results || []);
+      setIsSearching(results === null);
+      setIsPaused(results !== null);
     };
-  }, [hasNextPage, isFetchingNextPage, fetchNextPage, isPaused]);
-
-  if (isLoading && !isFetchingNextPage) {
-    return <Loading />;
-  }
-  if (error) {
-    return <div>Error fetching details: {error.message}</div>;
-  }
-
-  const handleSearch = (results) => {
-    setMovies(results || []);
-    setIsSearching(results === null);
-    setIsPaused(results !== null);
-  };
- 
-  
   return (
     <>
-      <HeroBanner kind="movie" />
+    <HeroBanner kind="movie" />
       <div className="relative px-0 sm:px-16 z-50 -mt-[50vh] pb-6 md:py-12 flex flex-col gap-6 md:gap-10">
         <div className="flex flex-col gap-3 md:gap-6 px-4 sm:px-0 ">
           <h2 className=" text-3xl md:text-4xl text-white font-medium">
@@ -141,8 +124,10 @@ function Movies() {
         </div>
         {isFetchingNextPage && <Loading />}
       </div>
+    
+    
     </>
-  );
+  )
 }
 
-export default Movies;
+export default Content

@@ -1,61 +1,67 @@
 import axios from "axios";
-import { useQuery, useInfiniteQuery } from "react-query";
+import { useQuery } from "react-query";
 
 export const API_BASE_URL = "https://api.themoviedb.org/3/";
 export const AUTH_HEADER = {
   Authorization: `Bearer ${process.env.REACT_APP_TMDB_TOKEN}`,
 };
 
-const fetchData = async ({ endpoint, id, type, queryKey, pageParam }) => {
+const fetchData = async ({ endpoint, id, type }) => {
   try {
+    let url = `${API_BASE_URL}`
 
-    let url = `${API_BASE_URL}${type}/${id || endpoint}`;
-    if (endpoint === "videos" || endpoint === "similar" || endpoint === "credits") {
-      url = `${API_BASE_URL}${type}/${id}/${endpoint}`;
-    } else if (endpoint === "trending") {
-      url = `${API_BASE_URL}trending/${type}/${queryKey || "day"}`;
+    //trending endpoint
+    if (endpoint === 'trending') {
+      if (!type) { throw new Error('type is required for the "trending" endpoint') }
+      url += `trending/${type}/day`
+
+      //nested endpoint 'videos , similar , credits'
+    } else if (['videos', 'credits', 'similar'].includes(endpoint)) {
+      if (!type || !id) {
+        throw new Error(`type and id are required for the '${endpoint}' endpoint. `)
+      }
+      url += `${type}/${id}/${endpoint}`
+    }
+    // for details
+    else if (type && id) {
+      url += `${type}/${id}`
+    }
+    //endpoints without any type and id
+    else if (endpoint) {
+      url += `${endpoint}`
     }
 
-    const { data } = await axios.get(url, {
-      params: { page: pageParam || 1 },
-      headers: AUTH_HEADER,
-    });
+    else {
+      throw new Error("Insufficient parameters to construct the API URL.");
 
-    return id ? data : { results: data?.results, nextPage: pageParam + 1, totalPage: data?.total_pages };
+    }
+    const { data } = await axios.get(url, { headers: AUTH_HEADER })
+
+    return id ? data : { results: data?.results || [] }
   }
   catch (error) {
-    console.log(error, 'Error Fetching Data')
+    console.error("Error Fetching Data:", error.message);
     throw new Error("An error occurred while fetching the data.");
   }
-};
+}
 
 export const useDetails = (type, id) =>
-  useQuery([`fetchDetails`, type, id], () => fetchData({ type, id }));
+  useQuery([`fetchDetails`, type, id], () => fetchData({ type, id }), { enabled: Boolean(type && id) });
 
-export const useList = (type, endpoint, queryKey = null) =>
-  useInfiniteQuery(
-    [`fetchList`, type, endpoint, queryKey],
-    ({ pageParam }) =>
-      fetchData({ type, endpoint, queryKey, pageParam }),
-    {
-      getNextPageParam: (lastPage) =>
-        lastPage.nextPage <= lastPage.totalPage ? lastPage.nextPage : undefined,
-    }
-  );
 
 export const useTrailer = (type, id) =>
   useQuery([`fetchTrailer`, type, id], () =>
-    fetchData({ type, id, endpoint: "videos" })
+    fetchData({ type, id, endpoint: "videos" }), { enabled: Boolean(type && id) }
   );
 
 
 export const useCast = (type, id) =>
   useQuery([`fetchCast`, type, id], () =>
-    fetchData({ type, id, endpoint: "credits" })
+    fetchData({ type, id, endpoint: "credits" }), { enabled: Boolean(type && id) }
   );
 
 export const useRelated = (type, id) =>
   useQuery([`fetchRelated`, type, id], () =>
-    fetchData({ type, id, endpoint: "similar" })
+    fetchData({ type, id, endpoint: "similar" }), { enabled: Boolean(type && id) }
   );
 
