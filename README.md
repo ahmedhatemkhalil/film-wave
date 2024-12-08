@@ -1,70 +1,108 @@
-# Getting Started with Create React App
+# Movie App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A React app that uses [The Movie Database (TMDb) API](https://www.themoviedb.org/) to display trending movies and TV shows, upcoming movies, TV series airing today, movie details, trailers, cast information, and more.
 
-## Available Scripts
+## Features
 
-In the project directory, you can run:
+- View trending movies and TV shows.
+- See upcoming movies and TV series airing today.
+- Get detailed information about movies and TV shows.
+- Watch trailers.
+- View cast information.
+- Explore similar movies and TV shows.
 
-### `npm start`
+## Tech Stack
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- **React**: A JavaScript library for building user interfaces.
+- **React Query**: For fetching and caching server data.
+- **Axios**: For making HTTP requests.
+- **TailwindCSS**: For styling the app.
+- **React Router**: For navigation between pages.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Installation
 
-### `npm test`
+1. Clone the repo:
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+    ```bash
+    git clone https://github.com/your-username/movie-app.git
+    ```
 
-### `npm run build`
+2. Install dependencies:
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+    ```bash
+    cd movie-app
+    npm install
+    ```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+3. Add your TMDb API key to the `.env` file:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+    ```env
+    REACT_APP_TMDB_TOKEN=your_api_key_here
+    ```
 
-### `npm run eject`
+4. Start the app:
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+    ```bash
+    npm start
+    ```
+---
+### How to Get Your TMDb API Key
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+To use the app, you'll need an API key from The Movie Database (TMDb). Follow these steps to get your API key:
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+---
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+#### 1. Visit the TMDb Website
+Go to [TMDb's official website](https://www.themoviedb.org/).
 
-## Learn More
+---
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+#### 2. Create an Account or Log In
+- If you don't have an account, click **Sign Up** to create one.
+- If you already have an account, click **Login** and enter your credentials.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+---
 
-### Code Splitting
+#### 3. Navigate to the API Section
+- After logging in, go to the [TMDb API page](https://www.themoviedb.org/settings/api) to find API-related information.
+- You can also find the API link in the settings menu under your profile.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+---
 
-### Analyzing the Bundle Size
+#### 4. Create a New API Key
+- On the API page, click the **Create** button to generate a new API key.
+- You will be prompted to provide some basic information about how you plan to use the API. Fill this out according to your needs.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+---
 
-### Making a Progressive Web App
+#### 5. Copy Your API Key
+Once your API key is generated, copy it to your clipboard.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+---
 
-### Advanced Configuration
+#### 6. Add the API Key to Your Project
+- In your project directory, create a file named `.env` if it doesn’t already exist.
+- Add the following line to the `.env` file:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+  ```plaintext
+  REACT_APP_TMDB_TOKEN=your_api_key_here
 
-### Deployment
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
 
-### `npm run build` fails to minify
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+  ## API Integration
+
+This app uses the [TMDb API](https://www.themoviedb.org/documentation/api) to fetch data like:
+
+- Trending movies and TV shows
+- Upcoming movies
+- TV series airing today
+- Movie/TV show details
+- Trailers
+- Cast information
+- Similar movies and TV shows
+
+
+   ```plaintext
+   REACT_APP_TMDB_TOKEN=your_api_key_here
