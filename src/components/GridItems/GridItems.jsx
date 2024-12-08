@@ -3,15 +3,7 @@ import { Link } from "react-router-dom";
 import defaultPhoto from "../../assets/image-placeholder.png";
 import Rating from "../Rating/Rating";
 
-function GridItems({
-  name,
-  date,
-  posterImage,
-  rate,
-  type,
-  id,
-  altText,
-}) {
+function GridItems({ name, date, posterImage, rate, type, id, altText }) {
   const roundedRate = rate ? parseFloat(rate?.toFixed(1)) : null;
 
   return (
@@ -25,7 +17,7 @@ function GridItems({
             <img
               className="aspect-[1/1.5] rounded-md  "
               src={posterImage || defaultPhoto}
-              alt={altText}
+              alt={altText || "Poster image"}
             />
             <div className="shadow-layer absolute inset-0 bg-black opacity-0 group-hover:opacity-70 transition duration-300"></div>
 
@@ -43,4 +35,4 @@ function GridItems({
   );
 }
 
-export default GridItems;
+export default React.memo(GridItems);

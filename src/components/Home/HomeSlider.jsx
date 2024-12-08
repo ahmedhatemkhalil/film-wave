@@ -8,20 +8,22 @@ import { useTrailer } from "../Apis/ApiFetching";
 import { Dialog, DialogPanel } from "@headlessui/react";
 import { X } from "react-feather";
 import MovieInfo from "./MovieInfo";
+import Loading from "../Loading/Loading";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import Loading from "../Loading/Loading";
+const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/original/";
+
 
 export default function HomeSlider() {
 
   const navigate = useNavigate();
-  const { data: movies, isLoading: moviesLoading } = useAllMoviesAndSeries();
+  const { data: movies, isLoading: moviesLoading ,  error: moviesError } = useAllMoviesAndSeries();
   const [activeTrailer, setActiveTrailer] = React.useState(null);
   const [activeMovieOrSeries, setActiveMovieOrSeries] = React.useState(null);
   const [isOpen, setIsOpen] = React.useState(false);
 
   const displayedMovies = React.useMemo(() => movies?.slice(0, 5), [movies]);
-  var settings = {
+  const settings = React.useMemo(() => ({
     dots: false,
     speed: 1000,
     infinite: true,
@@ -32,7 +34,7 @@ export default function HomeSlider() {
     autoplay: true,
     fade: true,
     pauseOnHover: false,
-  };
+  }), []);
 
   function handleMoreInfo(type, id) {
     navigate(`/details/${type}/${id}`);
@@ -53,7 +55,7 @@ export default function HomeSlider() {
     setActiveTrailer(null);
   };
 
-  const { data: trailerData } = useTrailer(
+  const { data: trailerData , error: trailerError } = useTrailer(
     activeTrailer?.type,
     activeTrailer?.id
   );
@@ -62,15 +64,18 @@ export default function HomeSlider() {
     (video) => video?.type === "Trailer"
   )?.key;
 
-  if (moviesLoading) {
+  if (moviesLoading || trailerError) {
     return <Loading />;
+  }
+  if (moviesError) {
+    return <div>Error fetching movie data. Please try again later.</div>;
   }
 
   return (
     <Slider {...settings}>
       {displayedMovies?.map((movie) => {
-        const posterImage = `https://image.tmdb.org/t/p/original/${movie.poster_path}`;
-        const backgroundImage = `https://image.tmdb.org/t/p/original/${movie.backdrop_path}`;
+        const posterImage = `${IMAGE_BASE_URL}${movie.poster_path}`;
+        const backgroundImage = `${IMAGE_BASE_URL}${movie.backdrop_path}`;
 
         return (
           <div key={movie.id}>

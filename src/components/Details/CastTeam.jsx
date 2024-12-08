@@ -1,6 +1,9 @@
 import React from "react";
 import actor from "../../assets/a-person-icon-on-a-transparent-background-png.png";
 function CastTeam({ cast }) {
+  if (!cast || cast.length === 0) {
+    return <p className="text-gray-300">No cast information available.</p>;
+  }
   return (
     <>
       <div className="cast gap-3 md:gap-4 flex flex-col">
@@ -19,7 +22,9 @@ function CastTeam({ cast }) {
                 }
                 className="w-full h-32 bg-contain  "
               />
-              <p className="text-sm   text-gray-300 break-words ">{name}</p>
+              <p className="text-sm   text-gray-300 break-words ">
+                {name || "Unknown"}
+              </p>
             </div>
           ))}
         </div>

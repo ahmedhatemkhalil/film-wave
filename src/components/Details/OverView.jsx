@@ -5,6 +5,10 @@ function OverView({ overview }) {
   const [isExpand, setIsExpand] = React.useState(false);
   const toggleExpand = () => setIsExpand(!isExpand);
 
+  if (!overview) {
+    return <p className="text-gray-300">No overview available.</p>;
+  }
+
   return (
     <>
       <div className="  over-view-section flex flex-col gap-3 md:gap-4">

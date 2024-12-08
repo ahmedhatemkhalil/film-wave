@@ -18,14 +18,15 @@ function Rating({ type, rate }) {
       ? truncatedRating.toFixed(1)
       : truncatedRating.toFixed(1);
 
-  if (roundedRate === "0.0" || roundedRate === "10.0") {
+  if (roundedRate <= 0 || roundedRate >= 10) {
     return null;
   }
 
-  const specificClasses = clsx([
+  const specificClasses = clsx({
     sharedClasses,
-    type === "swipe" ? swipeSpecificClasses : detailsSpecificClasses,
-  ]);
+    [swipeSpecificClasses]: type === "swipe",
+    [detailsSpecificClasses]: type !== "swipe",
+  });
   return (
     <>
       <div className={specificClasses}>

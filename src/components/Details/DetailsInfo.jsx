@@ -9,23 +9,24 @@ function DetailsInfo({ status, releaseDate, runtime }) {
     }
     return value;
   };
+
+  const details = [
+    { label: "Status:", value: status || "Unknown" },
+    { label: "Release Date:", value: releaseDate || "Unknown" },
+    {
+      label: typeof runtime === "number" ? "Runtime:" : "seasons:",
+      value: formatRunTime(runtime),
+    },
+  ];
   return (
     <>
       <div className="movie-info flex flex-col md:flex-row gap-1.5 md:gap-4">
-        <div className="status flex gap-2">
-          <p className="text-white text-lg font-medium">Status:</p>
-          <p className="text-gray-300 text-lg">{status}</p>
-        </div>
-        <div className="status flex gap-2">
-          <p className="text-white text-lg font-medium">Release Date:</p>
-          <p className="text-gray-300 text-lg">{releaseDate}</p>
-        </div>
-        <div className="status flex gap-2">
-          <p className="text-white text-lg font-medium">
-            {typeof runtime === "number" ? "Runtime:" : "seasons:"}
-          </p>
-          <p className="text-gray-300 text-lg">{formatRunTime(runtime)} </p>
-        </div>
+        {details.map(({ label, value }) => (
+          <div className="status flex gap-2">
+            <p className="text-white text-lg font-medium"> {label} </p>
+            <p className="text-gray-300 text-lg">{value}</p>
+          </div>
+        ))}
       </div>
     </>
   );

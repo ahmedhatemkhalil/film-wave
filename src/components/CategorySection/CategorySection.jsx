@@ -9,32 +9,30 @@ function CategorySection({
   showButton = true,
   mediaType,
   type,
-  isLoading
+  isLoading,
 }) {
-  console.log('category re-rendered');
-
   const navigate = useNavigate();
 
   const handleViewMore = () => {
-    const PathObject = {
+    const PathMapping = {
       "Trending Movies": "/movies/trending",
       "Trending TV Series": "/tv/trending",
       "Upcoming Movies": "/movies/upcoming",
       "TV Series Airing Today": "/tv/airing_today",
     };
-    const path = PathObject[category];
+    const path = PathMapping[category];
     if (path) {
       return navigate(path);
     }
   };
 
   const sharedClasses = " text-white text-sm  sm:text-xl md:text-2xl ";
-  const detailsSpecificClasses = " text-xl";
-  const swipeSpecificClasses = " mt-1 mb-3 md:mb-10";
+  const detailsClasses = " text-xl";
+  const swipeClasses = " mt-1 mb-3 md:mb-10";
 
   const specificClasses = clsx([
     sharedClasses,
-    type === "details" ? detailsSpecificClasses : swipeSpecificClasses,
+    type === "details" ? detailsClasses : swipeClasses,
   ]);
 
   return (
@@ -56,7 +54,12 @@ function CategorySection({
           )}
         </div>
       </div>
-      <SwipeList type={type} data={data} mediaType={mediaType} isLoading={isLoading} />
+      <SwipeList
+        type={type}
+        data={data}
+        mediaType={mediaType}
+        isLoading={isLoading}
+      />
     </>
   );
 }

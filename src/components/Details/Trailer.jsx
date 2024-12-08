@@ -1,8 +1,11 @@
 import React from "react";
-import Loading from "../Loading/Loading";
-function Trailer({ trailerKey, title, loadingTrailer }) {
-  if (loadingTrailer) {
-    return <Loading />;
+function Trailer({ trailerKey, title }) {
+  if (!trailerKey) {
+    return (
+      <div className="text-gray-300 text-center">
+        No trailer available for this {title}.
+      </div>
+    );
   }
   return (
     <>

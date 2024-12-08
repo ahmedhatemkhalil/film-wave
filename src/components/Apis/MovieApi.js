@@ -5,6 +5,7 @@ const API_BASE_URL = 'https://api.themoviedb.org/3/'
 const AUTH_HEADER = {
     Authorization: `Bearer ${process.env.REACT_APP_TMDB_TOKEN} `
 }
+
 // Handle special case for 'trending'
 const fetchMovie = async ({ pageParam = 1, endpoint, type }) => {
     console.log('Type:', type); // Debug log

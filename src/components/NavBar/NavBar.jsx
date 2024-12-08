@@ -9,7 +9,7 @@ import { Dialog, DialogPanel } from "@headlessui/react";
 function NavBar() {
   const isScrolled = useScroll();
   const [isOpen, setIsOpen] = useState(false);
-  const toggleMenu = () => setIsOpen(!isOpen);
+  const toggleMenu = React.useCallback(() => setIsOpen(!isOpen), [isOpen]);
 
   return (
     <>

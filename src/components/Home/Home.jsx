@@ -6,8 +6,14 @@ import { useTVSeriesAiringToday, useTrendingSeries } from "../Apis/SeriesApi";
 
 import HomeSlider from "./HomeSlider";
 import Loading from "../Loading/Loading";
+import { useLocation } from "react-router-dom";
 
 function Home() {
+  const location = useLocation();
+
+  React.useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
   const {
     data: trendingMovies,
     isLoading: trendingMoviesLoading,
@@ -29,21 +35,16 @@ function Home() {
     error: tvSeriesAiringTodayError,
   } = useTVSeriesAiringToday();
 
-  const loadingFlag = [
-    trendingMoviesLoading,
-    trendingSeriesLoading,
-    upComingMoviesLoading,
-    tvSeriesAiringTodayLoading,
-  ];
-  const errorFlag = [
-    trendingMoviesError,
-    trendingSeriesError,
-    upComingMoviesError,
-    tvSeriesAiringTodayError,
-  ];
-
-  const isLoading = loadingFlag.includes(true);
-  const isError = errorFlag.includes(true);
+  const isLoading =
+    trendingMoviesLoading ||
+    trendingSeriesLoading ||
+    upComingMoviesLoading ||
+    tvSeriesAiringTodayLoading;
+  const isError =
+    trendingMoviesError ||
+    trendingSeriesError ||
+    upComingMoviesError ||
+    tvSeriesAiringTodayError;
 
   if (isLoading) {
     return <Loading />;
@@ -64,31 +65,24 @@ function Home() {
             category="Trending Movies"
             mediaType="movie"
             type="home"
-            isLoading= {isLoading}
           />
           <CategorySection
             data={trendingSeries}
             category="Trending TV Series"
             mediaType="series"
             type="home"
-            isLoading= {isLoading}
-
           />
           <CategorySection
             data={upComingMovies}
             category="Upcoming Movies"
             mediaType="movie"
             type="home"
-            isLoading= {isLoading}
-
           />
           <CategorySection
             data={tvSeriesAiringToday}
             category="TV Series Airing Today"
             mediaType="tv"
             type="home"
-            isLoading= {isLoading}
-
           />
         </div>
       </section>

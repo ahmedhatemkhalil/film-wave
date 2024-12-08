@@ -40,26 +40,3 @@ input::placeholder {
 input.placeholder-transparent::placeholder {
   opacity: 0;
 }
-.skeleton {
-  background: #e0e0e0; /* light gray */
-  border-radius: 0.25rem;
-  width: 100%;
-  height: 0;
-  padding-top: 150%; /* aspect ratio 1:1.5 */
-  animation: pulse 1.5s infinite ease-in-out;
-}
-
-@keyframes pulse {
-  0% {
-    background-color: #e0e0e0;
-  }
-  50% {
-    background-color: #f0f0f0;
-  }
-  100% {
-    background-color: #e0e0e0;
-  }
-}
-h1, p {
-  user-select: text; 
-}

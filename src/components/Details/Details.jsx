@@ -1,7 +1,7 @@
 import React from "react";
 import PosterImage from "../PosterImage/PosterImage";
 import Rating from "./../Rating/Rating";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import BackdropCover from "../BackdropCover/BackdropCover";
 import defaultPhoto from "../../assets/image-placeholder.png";
 
@@ -18,14 +18,15 @@ import OverView from "./OverView";
 import CastTeam from "./CastTeam";
 import Trailer from "./Trailer";
 import Loading from "../Loading/Loading";
+const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/original/";
 
 function Details() {
   const location = useLocation();
 
   React.useEffect(() => {
-    window.scrollTo(0, 0); 
-  }, [location]);
-  const navigate = useNavigate()
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
+
   const { id, type } = useParams();
   const {
     data: detailsData,
@@ -48,16 +49,38 @@ function Details() {
     error: relatedError,
   } = useRelated(type, id);
 
-  const loadingFlag = [
-    detailsLoading,
-    trailerLoading,
-    castLoading,
-    relatedLoading,
-  ];
-  const errorFlag = [detailsError, trailerError, castError, relatedError];
+  const isLoading =
+    detailsLoading || trailerLoading || castLoading || relatedLoading;
+  const isError = detailsError || trailerError || castError || relatedError;
 
-  const isLoading = loadingFlag.includes(true);
-  const isError = errorFlag.includes(true);
+  const title = React.useMemo(
+    () =>
+      type === "tv"
+        ? detailsData?.name || "Unknown TV Show"
+        : detailsData?.title || "Unknown Movie",
+    [type, detailsData]
+  );
+  React.useEffect(() => {
+    document.title = title;
+
+    return () => {
+      document.title = "Film Wave";
+    };
+  }, [title]);
+
+  const trailerKey = React.useMemo(
+    () => trailerData?.results?.find((video) => video?.type === "Trailer")?.key,
+    [trailerData]
+  );
+
+  const processedRelatedData = React.useMemo(
+    () =>
+      relatedData?.results?.map((poster) => ({
+        ...poster,
+        media_type: poster.media_type || type,
+      })),
+    [relatedData, type]
+  );
 
   if (isLoading) {
     return (
@@ -67,28 +90,21 @@ function Details() {
     );
   }
   if (isError) {
-    navigate("/404");
-    return null;
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <p className="text-red-500">
+          Oops! Something went wrong. Please try again later.
+        </p>
+      </div>
+    );
   }
- 
-  const trailerKey = trailerData?.results?.find(
-    (video) => video?.type === "Trailer"
-  )?.key;
-
-  const title =
-    type === "tv"
-      ? detailsData?.name || "Unknown TV Show"
-      : detailsData?.title || "Unknown Movie";
-
   const poster = detailsData?.poster_path
-    ? `https://image.tmdb.org/t/p/original/${detailsData.poster_path}`
+    ? `${IMAGE_BASE_URL}${detailsData.poster_path}`
     : null;
-  const backdrop = detailsData?.backdrop_path;
+  const backdrop = detailsData?.backdrop_path
+    ? `${IMAGE_BASE_URL}${detailsData.backdrop_path}`
+    : null;
 
-  const processedRelatedData = relatedData?.results?.map((poster) => ({
-    ...poster,
-    media_type: poster.media_type || type,
-  }));
   return (
     <>
       {/* Backdrop */}
