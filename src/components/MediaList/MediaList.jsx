@@ -8,6 +8,7 @@ import defaultPhoto from "../../assets/image-placeholder.png";
 import GridSkeleton from "../Skeleton/GridSkeleton";
 
 function MediaList({ kind, mediaLists, useMediaList, title }) {
+  const reactId = React.useId()
   const { type } = useParams();
   const location = useLocation();
   const endpoint = type === "trending" ? "trending" : kind;
@@ -73,7 +74,7 @@ function MediaList({ kind, mediaLists, useMediaList, title }) {
   React.useEffect(() => {
     const timeout = setTimeout(() => {
       setIsSkeletonVisible(false);
-    }, 2000);
+    }, 1000);
 
     return () => clearTimeout(timeout);
   }, [isLoading, isFetchingNextPage]);
@@ -101,7 +102,7 @@ function MediaList({ kind, mediaLists, useMediaList, title }) {
               <li
                 role="menuitem"
                 className=" hover:text-mainColor duration-300 transition-all"
-                key={id}
+                key={`${reactId}-${id}`}
               >
                 <NavLink
                   className={({ isActive }) =>
@@ -147,13 +148,13 @@ function MediaList({ kind, mediaLists, useMediaList, title }) {
                       return isSkeletonVisible ||
                         isFetchingNextPage ||
                         isLoading ? (
-                        <GridSkeleton />
+                        <GridSkeleton key={`skeleton-${id}`} />
                       ) : (
                         <GridItems
                           type={kind}
                           id={id}
                           rate={vote_average}
-                          key={`${id}-${index}`}
+                          key={`${id}-${reactId}`}
                           posterImage={
                             poster_path
                               ? `https://image.tmdb.org/t/p/original${poster_path}`

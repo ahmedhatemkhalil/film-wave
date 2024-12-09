@@ -24,7 +24,6 @@ const fetchSeries = async ({ pageParam = 1, endpoint, type }) => {
         } else {
             throw new Error('Invalid endpoint');
         }
-        console.log('Constructed URL:', url);
 
 
         const { data } = await axios.get(url, {

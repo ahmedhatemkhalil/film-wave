@@ -33,7 +33,7 @@ function Details() {
   React.useEffect(() => {
     const timeout = setTimeout(() => {
       setIsSkeletonVisible(false);
-    }, 3000);
+    }, 1000);
 
     return () => clearTimeout(timeout);
   }, []);

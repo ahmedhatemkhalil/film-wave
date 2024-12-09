@@ -21,8 +21,8 @@ function DetailsInfo({ status, releaseDate, runtime }) {
   return (
     <>
       <div className="movie-info flex flex-col md:flex-row gap-1.5 md:gap-4">
-        {details.map(({ label, value }) => (
-          <div className="status flex gap-2">
+        {details.map(({ label, value } , index) => (
+          <div key={`movie-${index}`} className="status flex gap-2">
             <p className="text-white text-lg font-medium"> {label} </p>
             <p className="text-gray-300 text-lg">{value}</p>
           </div>
