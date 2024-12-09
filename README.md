@@ -104,5 +104,4 @@ This app uses the [TMDb API](https://www.themoviedb.org/documentation/api) to fe
 - Similar movies and TV shows
 
 
-   ```plaintext
-   REACT_APP_TMDB_TOKEN=your_api_key_here
+
