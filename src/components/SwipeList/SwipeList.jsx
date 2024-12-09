@@ -44,7 +44,7 @@ function SwipeList({ data, mediaType, type }) {
           onClick={swipeLeft}
           className=" absolute left-0 top-28  z-10 bg-black bg-opacity-50 text-white p-2 rounded-full hover:bg-opacity-70"
         >
-          <ChevronLeft size={30}  />
+          <ChevronLeft size={30} />
         </button>
         <div ref={containerRef} className={specificClasses}>
           {data?.map(
@@ -82,7 +82,7 @@ function SwipeList({ data, mediaType, type }) {
           onClick={swipeRight}
           className=" absolute right-0 top-28  z-10 bg-black bg-opacity-50 text-white p-2 rounded-full hover:bg-opacity-70"
         >
-          <ChevronRight size={30}  />
+          <ChevronRight size={30} />
         </button>
       </div>
     </>

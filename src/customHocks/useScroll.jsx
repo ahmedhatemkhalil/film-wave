@@ -16,7 +16,7 @@ function useScroll() {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
-  return isScrolled
+  return isScrolled;
 }
 
 export default useScroll;

@@ -21,10 +21,10 @@ function ErrorPage() {
     <div className="text-white h-screen flex justify-center items-center flex-col">
       <h1 className="text-4xl">Oops! Page Not Found</h1>
       <h2 className="text-xl mt-8">
-      The page you requested doesn't exist or you don't have access to it.
+        The page you requested doesn't exist or you don't have access to it.
       </h2>
       <p className="mt-4 text-gray-400">
-      You will be redirected to the homepage in {countdown} seconds.
+        You will be redirected to the homepage in {countdown} seconds.
       </p>
     </div>
   );

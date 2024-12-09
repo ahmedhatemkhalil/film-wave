@@ -1,5 +1,5 @@
 export const movieLists = [
-    { id: '1', path: '/movies/popular', text: 'Popular'  },
+    { id: '1', path: '/movies/popular', text: 'Popular' },
     { id: '2', path: '/movies/trending', text: 'Trending' },
     { id: '3', path: '/movies/top_rated', text: 'Top Rated' },
     { id: '4', path: '/movies/now_playing', text: 'Now Playing' },

@@ -5,7 +5,7 @@ import { Home, Film, Tv } from "react-feather";
 
 export const menuItems = [
   {
-    icon: <Home size={30} className="mr-2"  strokeWidth={3} />,
+    icon: <Home size={30} className="mr-2" strokeWidth={3} />,
     label: "Home",
     link: "/",
   },

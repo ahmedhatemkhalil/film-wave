@@ -5,6 +5,7 @@ import SearchBar from "../SearchBar/SearchBar";
 import GridItems from "../GridItems/GridItems";
 import Loading from "../Loading/Loading";
 import defaultPhoto from "../../assets/image-placeholder.png";
+import GridSkeleton from "../Skeleton/GridSkeleton";
 
 function MediaList({ kind, mediaLists, useMediaList, title }) {
   const { type } = useParams();
@@ -29,6 +30,7 @@ function MediaList({ kind, mediaLists, useMediaList, title }) {
   const [items, setItems] = React.useState([]);
   const [isSearching, setIsSearching] = React.useState(false);
   const [isPaused, setIsPaused] = React.useState(false);
+  const [isSkeletonVisible, setIsSkeletonVisible] = React.useState(true);
   const observerRef = React.useRef();
 
   const defaultItems = data?.pages.flatMap((page) => page.results) || [];
@@ -40,12 +42,13 @@ function MediaList({ kind, mediaLists, useMediaList, title }) {
           entries[0].isIntersecting &&
           hasNextPage &&
           !isFetchingNextPage &&
-          !isPaused
+          !isPaused &&
+          !isSkeletonVisible
         ) {
           fetchNextPage();
         }
       },
-      { threshold: 1 }
+      { threshold: 0.8 }
     );
 
     if (observerRef.current) observer.observe(observerRef.current);
@@ -53,13 +56,28 @@ function MediaList({ kind, mediaLists, useMediaList, title }) {
     return () => {
       observer.disconnect();
     };
-  }, [hasNextPage, isFetchingNextPage, fetchNextPage, isPaused]);
+  }, [
+    hasNextPage,
+    isFetchingNextPage,
+    fetchNextPage,
+    isPaused,
+    isSkeletonVisible,
+  ]);
 
   const handleSearch = (results) => {
     setItems(results || []);
     setIsSearching(results === null);
     setIsPaused(results !== null);
   };
+
+  React.useEffect(() => {
+    const timeout = setTimeout(() => {
+      setIsSkeletonVisible(false);
+    }, 2000);
+
+    return () => clearTimeout(timeout);
+  }, [isLoading, isFetchingNextPage]);
+
   if (isLoading && !isFetchingNextPage) {
     return <Loading />;
   }
@@ -91,8 +109,7 @@ function MediaList({ kind, mediaLists, useMediaList, title }) {
                   }
                   to={path}
                 >
-                  {" "}
-                  {text}{" "}
+                  {text}
                 </NavLink>
               </li>
             ))}
@@ -126,29 +143,34 @@ function MediaList({ kind, mediaLists, useMediaList, title }) {
                         release_date,
                       },
                       index
-                    ) => (
-                      <GridItems
-                        type={kind}
-                        id={id}
-                        rate={vote_average}
-                        key={`${id}-${index}`}
-                        posterImage={
-                          poster_path
-                            ? `https://image.tmdb.org/t/p/original${poster_path}`
-                            : defaultPhoto
-                        }
-                        name={title || name}
-                        date={release_date || first_air_date}
-                        isLoading={isLoading}
-                      />
-                    )
+                    ) => {
+                      return isSkeletonVisible ||
+                        isFetchingNextPage ||
+                        isLoading ? (
+                        <GridSkeleton />
+                      ) : (
+                        <GridItems
+                          type={kind}
+                          id={id}
+                          rate={vote_average}
+                          key={`${id}-${index}`}
+                          posterImage={
+                            poster_path
+                              ? `https://image.tmdb.org/t/p/original${poster_path}`
+                              : defaultPhoto
+                          }
+                          name={title || name}
+                          date={release_date || first_air_date}
+                        />
+                      );
+                    }
                   )}
                 </div>
               )}
             </>
           )}
 
-          <div ref={observerRef} style={{ height: "20px" }}></div>
+          <div ref={observerRef} style={{ height: "40px" }}></div>
         </div>
       </div>
     </>

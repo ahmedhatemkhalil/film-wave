@@ -13,28 +13,33 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/original/";
 
-
 export default function HomeSlider() {
-
   const navigate = useNavigate();
-  const { data: movies, isLoading: moviesLoading ,  error: moviesError } = useAllMoviesAndSeries();
+  const {
+    data: movies,
+    isLoading: moviesLoading,
+    error: moviesError,
+  } = useAllMoviesAndSeries();
   const [activeTrailer, setActiveTrailer] = React.useState(null);
   const [activeMovieOrSeries, setActiveMovieOrSeries] = React.useState(null);
   const [isOpen, setIsOpen] = React.useState(false);
 
   const displayedMovies = React.useMemo(() => movies?.slice(0, 5), [movies]);
-  const settings = React.useMemo(() => ({
-    dots: false,
-    speed: 1000,
-    infinite: true,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    autoplaySpeed: 3000,
-    arrows: false,
-    autoplay: true,
-    fade: true,
-    pauseOnHover: false,
-  }), []);
+  const settings = React.useMemo(
+    () => ({
+      dots: false,
+      speed: 1000,
+      infinite: true,
+      slidesToShow: 1,
+      slidesToScroll: 1,
+      autoplaySpeed: 3000,
+      arrows: false,
+      autoplay: true,
+      fade: true,
+      pauseOnHover: false,
+    }),
+    []
+  );
 
   function handleMoreInfo(type, id) {
     navigate(`/details/${type}/${id}`);
@@ -55,7 +60,7 @@ export default function HomeSlider() {
     setActiveTrailer(null);
   };
 
-  const { data: trailerData , error: trailerError } = useTrailer(
+  const { data: trailerData, error: trailerError } = useTrailer(
     activeTrailer?.type,
     activeTrailer?.id
   );
@@ -117,6 +122,7 @@ export default function HomeSlider() {
                             activeMovieOrSeries?.title ||
                             activeMovieOrSeries?.name
                           }
+                          showTitle={false}
                         />
                       ) : (
                         <Loading />

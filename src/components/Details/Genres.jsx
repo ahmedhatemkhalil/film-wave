@@ -10,6 +10,7 @@ function Genres({ genres }) {
         {genres?.map(({ id, name }) => (
           <span
             key={id}
+            
             className="h-fit px-4 py-1 text-gray-200 text-sm bg-mainColor rounded-3xl"
             aria-label={`Genre: ${name}`}
           >

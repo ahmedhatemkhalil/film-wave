@@ -11,7 +11,9 @@ function MovieInfo({ movie, handleMoreInfo, handleWatchTrailer }) {
           </h1>
         </div>
         <div className="mt-5">
-          <p className="  sm:text-xl max-w-[55rem] text-gray-200 font-medium ">{movie.overview}</p>
+          <p className="  sm:text-xl max-w-[55rem] text-gray-200 font-medium ">
+            {movie.overview}
+          </p>
         </div>
         {/* Buttons */}
         <div className="buttons flex flex-col tablet:flex-row mt-6  w-full md:min-w-[100%]  lg:w-2/3    ">

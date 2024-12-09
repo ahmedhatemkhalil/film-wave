@@ -27,7 +27,7 @@ function CategorySection({
   };
 
   const sharedClasses = " text-white text-sm  sm:text-xl md:text-2xl ";
-  const detailsClasses = " text-xl";
+  const detailsClasses = " text-xl mb-6 ";
   const swipeClasses = " mt-1 mb-3 md:mb-10";
 
   const specificClasses = clsx([
@@ -54,6 +54,7 @@ function CategorySection({
           )}
         </div>
       </div>
+
       <SwipeList
         type={type}
         data={data}

@@ -8,7 +8,6 @@ const AUTH_HEADER = {
 
 // Handle special case for 'trending'
 const fetchMovie = async ({ pageParam = 1, endpoint, type }) => {
-    console.log('Type:', type); // Debug log
 
     try {
 

@@ -12,10 +12,8 @@ function SearchBar({ setResults, searchType }) {
   const fetchIndex = React.useRef(0);
 
   async function getSearchFetch(term) {
-    console.log("Fetching with searchTerm:", term);
     if (!term.trim()) {
       setResults([]);
-      console.log("No search term, clearing results.");
       return;
     }
     setIsLoading(true);
