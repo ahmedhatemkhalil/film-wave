@@ -6,11 +6,11 @@ import Footer from "../components/Footer/Footer";
 function Layout() {
   return (
     <>
-      <div className=" pb-4 md:pb-0 ">
-        <NavBar />
+      <NavBar />
+      {/* Make the content scrollable */}
         <Outlet />
-        <Footer />
-      </div>
+      {/* Footer stays at the bottom */}
+      <Footer />
     </>
   );
 }

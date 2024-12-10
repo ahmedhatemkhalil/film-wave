@@ -7,8 +7,7 @@ function BackdropCoverSkeleton() {
       <SkeletonTheme
         baseColor="#181818"
         highlightColor="#333333"
-        duration={1.5}
-        enableAnimation={true}
+        enableAnimation={false}
       >
         <div className="relative h-[65vh]">
           <Skeleton className="w-full h-full" />

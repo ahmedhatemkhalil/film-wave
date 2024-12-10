@@ -4,7 +4,7 @@ import { NavLink, useLocation, useParams } from "react-router-dom";
 import SearchBar from "../SearchBar/SearchBar";
 import GridItems from "../GridItems/GridItems";
 import defaultPhoto from "../../assets/image-placeholder.png";
-import GridSkeleton from "../Skeleton/GridSkeleton";
+import GridSkeleton from "./../Skeleton/GridSkeleton";
 
 function MediaList({ kind, mediaLists, useMediaList, title }) {
   const { type } = useParams();
@@ -23,65 +23,57 @@ function MediaList({ kind, mediaLists, useMediaList, title }) {
   );
 
   // the page scrolls to the top whenever the user navigates to a new details page.
-
   React.useEffect(() => {
     window.scrollTo(0, 0);
-  }, [location.pathname]);
+  }, [location]);
 
   const [items, setItems] = React.useState([]);
+
   const [isSearching, setIsSearching] = React.useState(false);
-  const [isPaused, setIsPaused] = React.useState(false);
-  const [isSkeletonVisible, setIsSkeletonVisible] = React.useState(true);
-  
+
+  const [isPaused, setIsPaused] = React.useState(false); //for pausing the skeleton when the results are shown
+
+  React.useEffect(() => {
+    if (!isSearching) {
+      setIsPaused(false); // Resume infinite scrolling when not searching
+    }
+  }, [isSearching]);
+
   const defaultItems = data?.pages.flatMap((page) => page.results) || [];
-  
+
   const observerRef = React.useRef();
+
   React.useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
-        if (
-          entries[0].isIntersecting &&
-          hasNextPage &&
-          !isFetchingNextPage &&
-          !isPaused &&
-          !isSkeletonVisible
-        ) {
+        if (entries[0].isIntersecting && hasNextPage && !isPaused) {
           fetchNextPage();
         }
       },
-      { threshold: 1 }
+      { threshold: 0.5, 
+        rootMargin: '100px'}
     );
-
     if (observerRef.current) observer.observe(observerRef.current);
 
     return () => {
       observer.disconnect();
     };
-  }, [
-    hasNextPage,
-    isFetchingNextPage,
-    fetchNextPage,
-    isPaused,
-    isSkeletonVisible,
-  ]);
+  }, [fetchNextPage, hasNextPage, isPaused]);
+
+  const [isSkeletonVisible, setIsSkeletonVisible] = React.useState(true); //Controls the visibility of loading skeleton placeholders.
+  React.useEffect(() => {
+    const timeout = setTimeout(() => {
+      setIsSkeletonVisible(false);
+    }, 1000);
+
+    return () => clearTimeout(timeout);
+  }, []);
 
   const handleSearch = (results) => {
     setItems(results || []);
     setIsSearching(results === null);
     setIsPaused(results !== null);
   };
-
-  React.useEffect(() => {
-    const timeout = setTimeout(() => {
-      setIsSkeletonVisible(false);
-    }, 2000);
-
-    return () => clearTimeout(timeout);
-  }, [isLoading, isFetchingNextPage]);
-
-
-
-  
   if (error) {
     return <div>Error fetching details: {error.message}</div>;
   }
@@ -116,60 +108,50 @@ function MediaList({ kind, mediaLists, useMediaList, title }) {
             ))}
           </ul>
 
-          <SearchBar
-            searchType={kind}
-            setResults={handleSearch}
-            isLoading={isLoading}
-          />
+          <SearchBar searchType={kind} setResults={handleSearch} />
 
-          {isLoading && !isSearching && !isFetchingNextPage ? (
+          {/* Show Skeleton when loading */}
+          {isLoading || isSearching || isSkeletonVisible ? (
             <GridSkeleton />
+          ) : items.length === 0 && isSearching ? (
+            <p className="text-white text-xl">
+              Couldn't find anything related to your search query.
+            </p>
           ) : (
-            <>
-              {isSearching && items.length === 0 ? (
-                <p className="text-white text-xl">
-                  Couldn't find anything related to your search query.
-                </p>
-              ) : (
-                <div className="movie grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7 gap-10">
-                  {(items?.length > 0 ? items : defaultItems).map(
-                    ({
-                      id,
-                      vote_average,
-                      poster_path,
-                      name,
-                      first_air_date,
-                      title,
-                      release_date,
-                      
-                    } , index )  => {
-                      return isSkeletonVisible ||
-                        isFetchingNextPage ||
-                        isLoading ? (
-                        <GridSkeleton key={`skeleton-${id}`} />
-                      ) : (
-                        <GridItems
-                          type={kind}
-                          id={id}
-                          rate={vote_average}
-                          key={`${id}-${index}`}
-                          posterImage={
-                            poster_path
-                              ? `https://image.tmdb.org/t/p/original${poster_path}`
-                              : defaultPhoto
-                          }
-                          name={title || name}
-                          date={release_date || first_air_date}
-                        />
-                      );
+            <div className="movie grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7 gap-10">
+              {(items?.length > 0 ? items : defaultItems).map(
+                (
+                  {
+                    id,
+                    vote_average,
+                    poster_path,
+                    name,
+                    first_air_date,
+                    title,
+                    release_date,
+                  },
+                  index
+                ) => (
+                  <GridItems
+                    type={kind}
+                    id={id}
+                    rate={vote_average}
+                    key={`${id}-${index}`}
+                    posterImage={
+                      poster_path
+                        ? `https://image.tmdb.org/t/p/original${poster_path}`
+                        : defaultPhoto
                     }
-                  )}
-                </div>
+                    name={title || name}
+                    date={release_date || first_air_date}
+                  />
+                )
               )}
-            </>
+            </div>
           )}
+          {isFetchingNextPage && <p>Loading more...</p>}
 
-          <div ref={observerRef} style={{ height: "40px" }}></div>
+          <div ref={observerRef} style={{ height: "20px" }}></div>
         </div>
       </div>
     </>
