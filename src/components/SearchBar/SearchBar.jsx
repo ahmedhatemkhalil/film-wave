@@ -5,11 +5,15 @@ import { API_BASE_URL, AUTH_HEADER } from "./../Apis/ApiFetching";
 import Loading from "../Loading/Loading";
 
 function SearchBar({ setResults, searchType }) {
-  const [isFocused, setIsFocused] = React.useState(false);
-  const [isLoading, setIsLoading] = React.useState(false);
-  const [searchTerm, setSearchTerm] = React.useState("");
-  const [isPasting, setIsPasting] = React.useState(false);
-  const fetchIndex = React.useRef(0);
+  const [isFocused, setIsFocused] = React.useState(false); //state variable to track whether the input field is focused.
+
+  const [isLoading, setIsLoading] = React.useState(false); // state variable to track whether a search request is in progress.
+
+  const [searchTerm, setSearchTerm] = React.useState(""); //The current search term input by the user.
+
+  const [isPasting, setIsPasting] = React.useState(false); // state variable to track whether the user is pasting content into the input field.
+
+  const fetchIndex = React.useRef(0); // useRef to keep track of the current fetch operation's index to prevent race conditions.
 
   async function getSearchFetch(term) {
     if (!term.trim()) {

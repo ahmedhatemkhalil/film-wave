@@ -11,20 +11,27 @@ import MovieInfo from "./MovieInfo";
 import Loading from "../Loading/Loading";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+
+//constant
 const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/original/";
 
 export default function HomeSlider() {
   const navigate = useNavigate();
+
+  //Holds the data of movies and series fetched from the API
   const {
     data: movies,
     isLoading: moviesLoading,
     error: moviesError,
   } = useAllMoviesAndSeries();
-  const [activeTrailer, setActiveTrailer] = React.useState(null);
-  const [activeMovieOrSeries, setActiveMovieOrSeries] = React.useState(null);
-  const [isOpen, setIsOpen] = React.useState(false);
 
-  const displayedMovies = React.useMemo(() => movies?.slice(0, 5), [movies]);
+  const [activeTrailer, setActiveTrailer] = React.useState(null); //Keeps track of the movie or series for which the trailer is being shown.
+
+  const [activeMovieOrSeries, setActiveMovieOrSeries] = React.useState(null); //Stores information about the movie or series whose trailer is currently active.
+
+  const [isOpen, setIsOpen] = React.useState(false); // controls whether the trailer modal is open or closed
+
+  const displayedMovies = React.useMemo(() => movies?.slice(0, 5), [movies]); //extract the first 5 movies from the movies data
   const settings = React.useMemo(
     () => ({
       dots: false,
@@ -41,17 +48,18 @@ export default function HomeSlider() {
     []
   );
 
+  //Takes type and id as arguments to navigate to the details page of the selected movie or series.
   function handleMoreInfo(type, id) {
     navigate(`/details/${type}/${id}`);
   }
 
+  //This function is triggered when a user wants to watch a trailer for a movie or series.
   function handleWatchTrailer(type, id, movie) {
     if (!type || !id) {
-      console.error("Invalid parameters for trailer: type or id is missing.");
       return;
     }
-    setActiveMovieOrSeries(movie);
-    setActiveTrailer({ type, id });
+    setActiveMovieOrSeries(movie); //render the relevant movie or series information in the modal
+    setActiveTrailer({ type, id }); //fetch the correct trailer from the API using just the type and ID.
     setIsOpen(true);
   }
 

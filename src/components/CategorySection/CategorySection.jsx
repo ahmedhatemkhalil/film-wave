@@ -14,6 +14,7 @@ function CategorySection({
   const navigate = useNavigate();
 
   const handleViewMore = () => {
+    // handleViewMore function uses the useNavigate hook to navigate to specific routes based on the category prop.
     const PathMapping = {
       "Trending Movies": "/movies/trending",
       "Trending TV Series": "/tv/trending",

@@ -2,7 +2,9 @@ import React from "react";
 import TextTruncate from "react-text-truncate";
 
 function OverView({ overview }) {
+  // to keep track of whether the overview text is fully expanded or not.
   const [isExpand, setIsExpand] = React.useState(false);
+
   const toggleExpand = () => setIsExpand(!isExpand);
 
   if (!overview) {

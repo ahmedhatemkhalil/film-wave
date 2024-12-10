@@ -3,12 +3,10 @@ import HeroBanner from "../HeroBanner/HeroBanner";
 import { NavLink, useLocation, useParams } from "react-router-dom";
 import SearchBar from "../SearchBar/SearchBar";
 import GridItems from "../GridItems/GridItems";
-import Loading from "../Loading/Loading";
 import defaultPhoto from "../../assets/image-placeholder.png";
 import GridSkeleton from "../Skeleton/GridSkeleton";
 
 function MediaList({ kind, mediaLists, useMediaList, title }) {
-  const reactId = React.useId()
   const { type } = useParams();
   const location = useLocation();
   const endpoint = type === "trending" ? "trending" : kind;
@@ -24,18 +22,20 @@ function MediaList({ kind, mediaLists, useMediaList, title }) {
     endpoint === "trending" ? "day" : type || "popular"
   );
 
+  // the page scrolls to the top whenever the user navigates to a new details page.
+
   React.useEffect(() => {
     window.scrollTo(0, 0);
-  }, [location]);
+  }, [location.pathname]);
 
   const [items, setItems] = React.useState([]);
   const [isSearching, setIsSearching] = React.useState(false);
   const [isPaused, setIsPaused] = React.useState(false);
   const [isSkeletonVisible, setIsSkeletonVisible] = React.useState(true);
-  const observerRef = React.useRef();
 
   const defaultItems = data?.pages.flatMap((page) => page.results) || [];
 
+  const observerRef = React.useRef();
   React.useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -49,7 +49,7 @@ function MediaList({ kind, mediaLists, useMediaList, title }) {
           fetchNextPage();
         }
       },
-      { threshold: 0.8 }
+      { threshold: 1 }
     );
 
     if (observerRef.current) observer.observe(observerRef.current);
@@ -74,14 +74,11 @@ function MediaList({ kind, mediaLists, useMediaList, title }) {
   React.useEffect(() => {
     const timeout = setTimeout(() => {
       setIsSkeletonVisible(false);
-    }, 1000);
+    }, 2000);
 
     return () => clearTimeout(timeout);
   }, [isLoading, isFetchingNextPage]);
 
-  if (isLoading && !isFetchingNextPage) {
-    return <Loading />;
-  }
   if (error) {
     return <div>Error fetching details: {error.message}</div>;
   }
@@ -102,7 +99,7 @@ function MediaList({ kind, mediaLists, useMediaList, title }) {
               <li
                 role="menuitem"
                 className=" hover:text-mainColor duration-300 transition-all"
-                key={`${reactId}-${id}`}
+                key={`${text}-${id}`}
               >
                 <NavLink
                   className={({ isActive }) =>
@@ -122,56 +119,48 @@ function MediaList({ kind, mediaLists, useMediaList, title }) {
             isLoading={isLoading}
           />
 
-          {isLoading && !isSearching && !isFetchingNextPage ? (
-            <Loading />
+          {isSearching && items.length === 0 ? (
+            <p className="text-white text-xl">
+              Couldn't find anything related to your search query.
+            </p>
           ) : (
-            <>
-              {isSearching && items.length === 0 ? (
-                <p className="text-white text-xl">
-                  Couldn't find anything related to your search query.
-                </p>
-              ) : (
-                <div className="movie grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7 gap-10">
-                  {(items?.length > 0 ? items : defaultItems).map(
-                    (
-                      {
-                        id,
-                        vote_average,
-                        poster_path,
-                        name,
-                        first_air_date,
-                        title,
-                        release_date,
-                      },
-                      index
-                    ) => {
-                      return isSkeletonVisible ||
-                        isFetchingNextPage ||
-                        isLoading ? (
-                        <GridSkeleton key={`skeleton-${id}`} />
-                      ) : (
-                        <GridItems
-                          type={kind}
-                          id={id}
-                          rate={vote_average}
-                          key={`${id}-${reactId}`}
-                          posterImage={
-                            poster_path
-                              ? `https://image.tmdb.org/t/p/original${poster_path}`
-                              : defaultPhoto
-                          }
-                          name={title || name}
-                          date={release_date || first_air_date}
-                        />
-                      );
-                    }
-                  )}
-                </div>
+            <div className="movie grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7 gap-10">
+              {(items?.length > 0 ? items : defaultItems).map(
+                (
+                  {
+                    id,
+                    vote_average,
+                    poster_path,
+                    name,
+                    first_air_date,
+                    title,
+                    release_date,
+                  },
+                  index
+                ) => {
+                  return isSkeletonVisible || isFetchingNextPage ? (
+                    <GridSkeleton key={`skeleton-${id}`} />
+                  ) : (
+                    <GridItems
+                      type={kind}
+                      id={id}
+                      rate={vote_average}
+                      key={`${id}-${index}`}
+                      posterImage={
+                        poster_path
+                          ? `https://image.tmdb.org/t/p/original${poster_path}`
+                          : defaultPhoto
+                      }
+                      name={title || name}
+                      date={release_date || first_air_date}
+                    />
+                  );
+                }
               )}
-            </>
+            </div>
           )}
 
-          <div ref={observerRef} style={{ height: "40px" }}></div>
+          <div ref={observerRef} style={{ height: "10px" }}></div>
         </div>
       </div>
     </>

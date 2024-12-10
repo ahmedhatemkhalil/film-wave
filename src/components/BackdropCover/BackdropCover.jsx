@@ -1,5 +1,6 @@
 import React from "react";
 function BackdropCover({ backgroundCover, poster }) {
+  //if there is no background it will show the poster in default
   const backgroundImage = `url('https://image.tmdb.org/t/p/original/${
     backgroundCover || poster
   }')`;

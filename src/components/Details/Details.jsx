@@ -29,15 +29,16 @@ import RelatedSkeleton from "../Skeleton/RelatedSkeleton";
 const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/original/";
 
 function Details() {
-  const [isSkeletonVisible, setIsSkeletonVisible] = React.useState(true);
+  const [isSkeletonVisible, setIsSkeletonVisible] = React.useState(true); //Controls the visibility of loading skeleton placeholders.
   React.useEffect(() => {
     const timeout = setTimeout(() => {
       setIsSkeletonVisible(false);
-    }, 1000);
+    }, 2000);
 
     return () => clearTimeout(timeout);
   }, []);
 
+  // the page scrolls to the top whenever the user navigates to a new details page.
   const location = useLocation();
 
   React.useEffect(() => {
@@ -45,21 +46,29 @@ function Details() {
   }, [location.pathname]);
 
   const { id, type } = useParams();
+
+  //fetches the main details of movie or Tv show (title,backdrop cover,poster,rating,genres,overView,runTime,status,releaseDate)
   const {
     data: detailsData,
     isLoading: detailsLoading,
     error: detailsError,
   } = useDetails(type, id);
+
+  //Fetches trailer information
   const {
     data: trailerData,
     isLoading: trailerLoading,
     error: trailerError,
   } = useTrailer(type, id);
+
+  //fetches the cast(actors)
   const {
     data: castData,
     isLoading: castLoading,
     error: castError,
   } = useCast(type, id);
+
+  //fetches related movies or series
   const {
     data: relatedData,
     isLoading: relatedLoading,
@@ -73,6 +82,7 @@ function Details() {
 
   const isError = detailsError || trailerError || castError || relatedError;
 
+  //The title of the browser is shown based on the movie/TV show title.
   const title = React.useMemo(
     () =>
       type === "tv"
@@ -88,11 +98,13 @@ function Details() {
     };
   }, [title]);
 
+  //extracts the first trailer key of type trailer
   const trailerKey = React.useMemo(
     () => trailerData?.results?.find((video) => video?.type === "Trailer")?.key,
     [trailerData]
   );
 
+  // Ensures each item in relatedData.results has a media_type property. If not, it uses the default `type` ("tv" or "movie").
   const processedRelatedData = React.useMemo(
     () =>
       relatedData?.results?.map((poster) => ({
@@ -102,6 +114,7 @@ function Details() {
     [relatedData, type]
   );
 
+  //handle error
   if (isError) {
     return (
       <div className="flex justify-center items-center min-h-screen">
@@ -111,6 +124,7 @@ function Details() {
       </div>
     );
   }
+  //render the poster and backdrop
   const poster = detailsData?.poster_path
     ? `${IMAGE_BASE_URL}${detailsData.poster_path}`
     : null;
@@ -120,7 +134,7 @@ function Details() {
 
   return (
     <>
-      {/* Backdrop */}
+      {/* Backdrop section */}
       {isSkeletonVisible || isDetailsLoading ? (
         <BackdropCoverSkeleton />
       ) : (

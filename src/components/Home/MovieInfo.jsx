@@ -5,17 +5,20 @@ function MovieInfo({ movie, handleMoreInfo, handleWatchTrailer }) {
   return (
     <>
       <div className="first  mt-20 md:mt-0  w-full md:w-[65%]   text-white flex flex-col justify-center">
+        {/* title section */}
         <div className="mt-5 ">
           <h1 className=" text-2xl sm:text-3xl md:text-5xl font-medium">
             {movie.title || movie.name}
           </h1>
         </div>
+
+        {/* overview section */}
         <div className="mt-5">
           <p className="  sm:text-xl max-w-[55rem] text-gray-200 font-medium ">
             {movie.overview}
           </p>
         </div>
-        {/* Buttons */}
+        {/* Buttons section */}
         <div className="buttons flex flex-col tablet:flex-row mt-6  w-full md:min-w-[100%]  lg:w-2/3    ">
           <button
             onClick={() => handleMoreInfo(movie.media_type, movie.id)}

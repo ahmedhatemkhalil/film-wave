@@ -10,7 +10,7 @@ function CastTeam({ cast }) {
         <h2 className="text-white text-3xl">Cast</h2>
         <div className="cast-info justify-center 428:justify-start flex flex-wrap gap-5">
           {cast?.slice(0, 6)?.map(({ id, name, profile_path }) => (
-            <div key={id} className="flex flex-col gap-2 w-20">
+            <div key={`${name}-${id}`} className="flex flex-col gap-2 w-20">
               <img
                 src={
                   profile_path

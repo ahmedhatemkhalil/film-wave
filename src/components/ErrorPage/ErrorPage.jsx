@@ -2,6 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 
 function ErrorPage() {
+  // The countdown is initialized to 5 and is used to display the number of seconds remaining before redirection
   const [countdown, setCountdown] = React.useState(5);
   const navigate = useNavigate();
 

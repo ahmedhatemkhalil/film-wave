@@ -40,3 +40,14 @@ input::placeholder {
 input.placeholder-transparent::placeholder {
   opacity: 0;
 }
+.grid-skeleton {
+  height: 300px; /* Replace with the expected height of your grid items */
+  width: 100%; /* Match the grid layout for responsiveness */
+  background: #ccc; /* Gray placeholder color */
+  border-radius: 8px; /* Rounded corners for better aesthetics */
+  animation: pulse 1.5s infinite; /* Optional animation for a loading effect */
+}
+.fade-out {
+  opacity: 0;
+  transition: opacity 0.5s ease-out;
+}

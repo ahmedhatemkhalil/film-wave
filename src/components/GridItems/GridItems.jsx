@@ -18,7 +18,9 @@ function GridItems({ name, date, posterImage, rate, type, id, altText }) {
               className="aspect-[1/1.5] rounded-md  "
               src={posterImage || defaultPhoto}
               alt={altText || "Poster image"}
+              loading="lazy"
             />
+            {/* overlay */}
             <div className="shadow-layer absolute inset-0 bg-black opacity-0 group-hover:opacity-70 transition duration-300"></div>
 
             <div className="flex items-center gap-3">

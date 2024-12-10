@@ -7,11 +7,13 @@ import Loading from "../Loading/Loading";
 import { useLocation } from "react-router-dom";
 
 function Home() {
+  // the page scrolls to the top whenever the user navigates to a new  page.
   const location = useLocation();
 
   React.useEffect(() => {
     window.scrollTo(0, 0);
   }, [location.pathname]);
+
   const {
     data: trendingMovies,
     isLoading: trendingMoviesLoading,
@@ -33,6 +35,7 @@ function Home() {
     error: tvSeriesAiringTodayError,
   } = useTVSeriesAiringToday();
 
+  // If any of the isLoading states are true, isGlobalLoading will be true , indicating that the page is still loading.
   const isGlobalLoading =
     trendingMoviesLoading ||
     trendingSeriesLoading ||

@@ -7,9 +7,11 @@ import useScroll from "../../customHocks/useScroll";
 import { Dialog, DialogPanel } from "@headlessui/react";
 
 function NavBar() {
-  const isScrolled = useScroll();
-  const [isOpen, setIsOpen] = useState(false);
-  const toggleMenu = React.useCallback(() => setIsOpen(!isOpen), [isOpen]);
+  const isScrolled = useScroll(); // is a boolean that indicates if the user has scrolled down the page.
+
+  const [isOpen, setIsOpen] = useState(false);//state to manage whether the mobile menu is open or closed.
+
+  const toggleMenu = React.useCallback(() => setIsOpen(!isOpen), [isOpen]); // is a callback function that toggles the isOpen state.
 
   return (
     <>
@@ -21,6 +23,7 @@ function NavBar() {
         >
           {/* Nav container */}
           <div className="py-2 flex items-center justify-between ">
+            
             {/* Mobile Menu Button */}
             <button
               className="md:hidden  cursor-pointer text-white"
