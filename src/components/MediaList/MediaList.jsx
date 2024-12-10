@@ -32,9 +32,9 @@ function MediaList({ kind, mediaLists, useMediaList, title }) {
   const [isSearching, setIsSearching] = React.useState(false);
   const [isPaused, setIsPaused] = React.useState(false);
   const [isSkeletonVisible, setIsSkeletonVisible] = React.useState(true);
-
+  
   const defaultItems = data?.pages.flatMap((page) => page.results) || [];
-
+  
   const observerRef = React.useRef();
   React.useEffect(() => {
     const observer = new IntersectionObserver(
@@ -79,6 +79,9 @@ function MediaList({ kind, mediaLists, useMediaList, title }) {
     return () => clearTimeout(timeout);
   }, [isLoading, isFetchingNextPage]);
 
+
+
+  
   if (error) {
     return <div>Error fetching details: {error.message}</div>;
   }
@@ -119,48 +122,54 @@ function MediaList({ kind, mediaLists, useMediaList, title }) {
             isLoading={isLoading}
           />
 
-          {isSearching && items.length === 0 ? (
-            <p className="text-white text-xl">
-              Couldn't find anything related to your search query.
-            </p>
+          {isLoading && !isSearching && !isFetchingNextPage ? (
+            <GridSkeleton />
           ) : (
-            <div className="movie grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7 gap-10">
-              {(items?.length > 0 ? items : defaultItems).map(
-                (
-                  {
-                    id,
-                    vote_average,
-                    poster_path,
-                    name,
-                    first_air_date,
-                    title,
-                    release_date,
-                  },
-                  index
-                ) => {
-                  return isSkeletonVisible || isFetchingNextPage ? (
-                    <GridSkeleton key={`skeleton-${id}`} />
-                  ) : (
-                    <GridItems
-                      type={kind}
-                      id={id}
-                      rate={vote_average}
-                      key={`${id}-${index}`}
-                      posterImage={
-                        poster_path
-                          ? `https://image.tmdb.org/t/p/original${poster_path}`
-                          : defaultPhoto
-                      }
-                      name={title || name}
-                      date={release_date || first_air_date}
-                    />
-                  );
-                }
+            <>
+              {isSearching && items.length === 0 ? (
+                <p className="text-white text-xl">
+                  Couldn't find anything related to your search query.
+                </p>
+              ) : (
+                <div className="movie grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7 gap-10">
+                  {(items?.length > 0 ? items : defaultItems).map(
+                    ({
+                      id,
+                      vote_average,
+                      poster_path,
+                      name,
+                      first_air_date,
+                      title,
+                      release_date,
+                      
+                    } , index )  => {
+                      return isSkeletonVisible ||
+                        isFetchingNextPage ||
+                        isLoading ? (
+                        <GridSkeleton key={`skeleton-${id}`} />
+                      ) : (
+                        <GridItems
+                          type={kind}
+                          id={id}
+                          rate={vote_average}
+                          key={`${id}-${index}`}
+                          posterImage={
+                            poster_path
+                              ? `https://image.tmdb.org/t/p/original${poster_path}`
+                              : defaultPhoto
+                          }
+                          name={title || name}
+                          date={release_date || first_air_date}
+                        />
+                      );
+                    }
+                  )}
+                </div>
               )}
-            </div>
+            </>
           )}
 
-          <div ref={observerRef} style={{ height: "10px" }}></div>
+          <div ref={observerRef} style={{ height: "40px" }}></div>
         </div>
       </div>
     </>
