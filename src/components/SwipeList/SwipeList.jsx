@@ -51,7 +51,7 @@ function SwipeList({ data, mediaType, type }) {
             ({ id, media_type, poster_path, title, vote_average, name }) => {
               const postTitle = getPosterTitle({ title, name });
               return (
-                <Link key={id} to={`/details/${media_type || mediaType}/${id}`}>
+                <Link key={`${id}-${name}`} to={`/details/${media_type || mediaType}/${id}`}>
                   <div className="  poster     min-w-48 h-72 cursor-pointer flex-shrink-0 mb-20  relative group">
                     <img
                       src={

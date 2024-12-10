@@ -25,7 +25,7 @@ function MediaList({ kind, mediaLists, useMediaList, title }) {
   // the page scrolls to the top whenever the user navigates to a new details page.
   React.useEffect(() => {
     window.scrollTo(0, 0);
-  }, [location]);
+  }, [location.pathname]);
 
   const [items, setItems] = React.useState([]);
 
@@ -50,8 +50,7 @@ function MediaList({ kind, mediaLists, useMediaList, title }) {
           fetchNextPage();
         }
       },
-      { threshold: 0.5, 
-        rootMargin: '100px'}
+      { threshold: 0.5, rootMargin: "100px" }
     );
     if (observerRef.current) observer.observe(observerRef.current);
 
@@ -111,9 +110,9 @@ function MediaList({ kind, mediaLists, useMediaList, title }) {
           <SearchBar searchType={kind} setResults={handleSearch} />
 
           {/* Show Skeleton when loading */}
-          {isLoading || isSearching || isSkeletonVisible ? (
+          {isLoading || isSkeletonVisible ? (
             <GridSkeleton />
-          ) : items.length === 0 && isSearching ? (
+          ) : isSearching && items.length === 0 ? (
             <p className="text-white text-xl">
               Couldn't find anything related to your search query.
             </p>

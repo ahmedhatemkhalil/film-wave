@@ -2,12 +2,10 @@ import axios from "axios";
 import React from "react";
 import { Search, X } from "react-feather";
 import { API_BASE_URL, AUTH_HEADER } from "./../Apis/ApiFetching";
-import Loading from "../Loading/Loading";
 
 function SearchBar({ setResults, searchType }) {
   const [isFocused, setIsFocused] = React.useState(false); //state variable to track whether the input field is focused.
 
-  const [isLoading, setIsLoading] = React.useState(false); // state variable to track whether a search request is in progress.
 
   const [searchTerm, setSearchTerm] = React.useState(""); //The current search term input by the user.
 
@@ -20,7 +18,6 @@ function SearchBar({ setResults, searchType }) {
       setResults([]);
       return;
     }
-    setIsLoading(true);
     const endpoint = searchType === "movie" ? "movie" : "tv";
 
     const currentFetchIndex = fetchIndex.current + 1;
@@ -39,9 +36,7 @@ function SearchBar({ setResults, searchType }) {
         console.error("Error fetching search results:", error);
         setResults(null);
       }
-    } finally {
-      setIsLoading(false);
-    }
+    } 
   }
   const handleChange = (e) => {
     if (!isPasting) {
@@ -105,7 +100,6 @@ function SearchBar({ setResults, searchType }) {
           </button>
         )}
       </div>
-      {isLoading && <Loading />}
     </>
   );
 }
